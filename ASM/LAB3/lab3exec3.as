@@ -10,8 +10,6 @@ STACKBASE       EQU     8000h
                 INC     R1
                 JAL     Base   
                 
-                
-                
                 DEC     R3
                 
 Fim:            BR      Fim
@@ -19,8 +17,7 @@ Fim:            BR      Fim
 Base:           MVI     R2,1
                 CMP     R1,R2
                 BR.P    Recursao
-                MOV     R2,R1
-                ADD     R3,R3,R2
+                ADD     R3,R3,R1
                 JMP     R7
                 
 Recursao:       DEC     R1
