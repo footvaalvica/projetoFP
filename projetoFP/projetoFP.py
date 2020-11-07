@@ -35,3 +35,14 @@ def obter_linha(tab, num):
         return tab[num]
     else:
         raise ValueError("caca")
+
+def obter_diagonal(tab, num):
+    diagonal = ()
+    if (eh_tabuleiro(tab) and isinstance(num, int) and 1 <= num <= 2) == True:
+        if num == 1:
+            diagonal += (tab[0][0],) + (tab[1][1],) + (tab[2][2],)
+        if num == 2:
+            diagonal += (tab[0][2],) + (tab[1][1],) + (tab[2][0],)
+        return diagonal
+    else:
+        raise ValueError("caca")
