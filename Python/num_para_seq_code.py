@@ -1,10 +1,5 @@
-x = 7
-y = 9
-
-if x < y:
-    x = x // 2
-else:
-    y = y - 1
-
-print(x)
-print(y)
+def foo(v,n):
+    if n > 0 :
+        return v + foo(v,n-1)
+    else:
+        return 0
