@@ -1,9 +1,24 @@
 STACKBASE       EQU     8000h
+
+VALOR           EQU     11
+        
                 ORIG    0000h
                 MVI     R6, STACKBASE
                 
-                MVI     R1, 10
-                JAL     Base   
+                MVI     R1,VALOR
+                DEC     R1
+
+                MOV     R4,R1
+                DEC     R4
+
+Here:           NOP
+
+                BR.P    Loop
+                BR.N    Fim
+                
+Loop:           JAL     Base
+                DEC     R4
+                BR      Here
                 
 Fim:            BR      Fim
 

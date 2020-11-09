@@ -7,7 +7,6 @@ STACKBASE       EQU     8000h
                 
                 MVI     R1, 10
                 INC     R1
-                INC     R1
                 JAL     Base   
                 
                 DEC     R3
