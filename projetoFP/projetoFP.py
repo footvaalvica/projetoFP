@@ -14,7 +14,7 @@ def eh_tabuleiro(tab):
                 return False
     else:
         return False
-    return Truth
+    return Truth    
 
 def eh_posicao(pos):
     return isinstance(pos, int) and 1 <= pos <= 9
@@ -46,3 +46,23 @@ def obter_diagonal(tab, num):
         return diagonal
     else:
         raise ValueError("caca")
+
+def tabuleiro_str(tab):
+    corda = "   |   |   \n-----------\n   |   |   \n-----------\n   |   |   "
+    newCorda = ""
+    tabuleiro = list(corda)
+    if eh_tabuleiro(tab) == False:
+        raise ValueError("caca")
+    else:
+        for i in range(3):
+            for i in (obter_linha(tab,i + 1)):
+                if i == 1:
+                    i = "X"
+                if i == 0:
+                    i = " "
+                if i == -1:
+                    i = "O"
+                print(i)        
+    for i in tabuleiro:
+        newCorda += i
+    print(newCorda)
