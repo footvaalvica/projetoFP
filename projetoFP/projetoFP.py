@@ -48,21 +48,31 @@ def obter_diagonal(tab, num):
         raise ValueError("caca")
 
 def tabuleiro_str(tab):
+    tabGood = []
+    tabGood2 = []
+    tabPos = [1,5,9,25,29,33,49,53,57]
+    counter = 0
     corda = "   |   |   \n-----------\n   |   |   \n-----------\n   |   |   "
+    cordaList = []
     newCorda = ""
-    tabuleiro = list(corda)
     if eh_tabuleiro(tab) == False:
         raise ValueError("caca")
     else:
+        cordaList = list(corda)
         for i in range(3):
-            for i in (obter_linha(tab,i + 1)):
-                if i == 1:
-                    i = "X"
-                if i == 0:
-                    i = " "
-                if i == -1:
-                    i = "O"
-                print(i)        
-    for i in tabuleiro:
-        newCorda += i
-    print(newCorda)
+            for e in obter_linha(tab,i+1):
+                tabGood.append(e)
+        for i in tabGood:
+            if i == 1:
+                i = "X"
+            elif i == 0:
+                i = " "
+            elif i == -1:
+                i = "O"
+            tabGood2.append(i)
+        while counter < len(tabGood2):
+            cordaList[tabPos[counter]] = tabGood2[counter]
+            counter += 1
+        for i in cordaList:
+            newCorda += str(i)
+        print(newCorda)
