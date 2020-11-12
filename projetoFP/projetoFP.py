@@ -50,7 +50,7 @@ def obter_diagonal(tab, num):
 def tabuleiro_str(tab):
     tabGood = []
     tabGood2 = []
-    tabPos = [1,5,9,25,29,33,49,53,57]
+    tabPos = (1,5,9,25,29,33,49,53,57)
     counter = 0
     corda = "   |   |   \n-----------\n   |   |   \n-----------\n   |   |   "
     cordaList = []
