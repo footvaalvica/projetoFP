@@ -133,7 +133,7 @@ def jogador_ganhador(tab):
                 return 0
 
 def marcar_posicao(tab,n,pos):
-    if eh_posicao_livre(tab,pos) == False or n != 1 or n != 0 or n != -1:
+    if eh_posicao_livre(tab,pos) == False or (n != 1 and n != -1):
         raise ValueError("marcar_posicao: algum dos argumentos e invalido")
     else:
         tabGood = tabuleiroMelhor(tab)
@@ -149,7 +149,107 @@ def escolher_posicao_manual(tab):
         raise ValueError('escolher_posicao_manual: a posicao introduzida e invalida')
     return x
 
-def escolher_posicao_auto(tab,n,str):
-    if eh_tabuleiro(tab) == False or n != 1 or n != 0 or n != 1 or str != "basico" or str != "normal" or str != "perfeito":
+def escolher_posicao_auto(tab,n,strat):
+    return_var = 0
+    if eh_tabuleiro(tab) == False or (n != 1 and n != -1) or (strat != 'basico' and strat != 'normal' and strat != 'perfeito'):
         raise ValueError("escolher_posicao_auto: algum dos argumentos e invalido")
+    if strat == "basico":
+        return_var = centro5(tab,n)
+        if return_var != 0:
+            return return_var
+        return_var = cantovazio7(tab,n)
+        if return_var != 0:
+            return return_var
+        return_var = lateralvazio8(tab,n)
+        if return_var != 0:
+            return return_var
+    elif strat == "normal":
+        return_var = vitoria1(tab,n)
+        if return_var != 0:
+            return return_var
+        return_var = centro5(tab,n)
+        if return_var != 0:
+            return return_var
+        return_var = cantooposto6(tab,n)
+        if return_var != 0:
+            return return_var
+        return_var = cantovazio7(tab,n)
+        if return_var != 0:
+            return return_var
+        return_var = lateralvazio8(tab,n)
+        if return_var != 0:
+            return return_var
+    elif strat == "perfeito":
+        pass
+
+#Altura de definir um monte de funções auxilares, let's go
+
+def vitoria1(tab,n):
+    pos = 0
+    for i in range(3):
+        linha = obter_linha(tab,(i+1))
+        if linha[0] != 0 and linha[0] == linha[2]:
+            pos = 2 + 3*i
+            marcar_posicao(tab,n,pos)
+            return pos
+        coluna = obter_coluna(tab,(i+1))
+        if coluna[0] != 0 and coluna[0] == coluna[2]:
+            pos = 4 + i
+            marcar_posicao(tab,n,pos)
+            return(pos)
+    #falta implementar diagonal
+
+def bloqueio2(tab,n):
+    pass
+
+#Já definidas
+
+def centro5(tab,n):
+    if tab[1][1] == 0:
+        marcar_posicao(tab,n,5)
+        return 5
+    return 0
+
+def cantooposto6(tab,n):
+    if tab[0][0] == -n:
+        marcar_posicao(tab,n,9)
+        return 9
+    elif tab[0][2] == -n:
+        marcar_posicao(tab,n,7)
+        return 7
+    elif tab[2][0] == -n:
+        marcar_posicao(tab,n,3)
+        return 3
+    elif tab[2][2] == -n:
+        marcar_posicao(tab,n,1)
+        return 1
+
+def cantovazio7(tab,n):
+    if tab[0][0] == 0:
+        marcar_posicao(tab,n,1)
+        return 1
+    elif tab[0][2] == 0:
+        marcar_posicao(tab,n,3)
+        return 3
+    elif tab[2][0] == 0:
+        marcar_posicao(tab,n,7)
+        return 7
+    elif tab[2][2] == 0:
+        marcar_posicao(tab,n,9)
+        return 9
+    pass
+
+def lateralvazio8(tab,n):
+    if tab[0][1] == 0:
+        marcar_posicao(tab,n,2)
+        return 2
+    elif tab[1][0] == 0:
+        marcar_posicao(tab,n,4)
+        return 4
+    elif tab[1][2] == 0:
+        marcar_posicao(tab,n,6)
+        return 6
+    elif tab[2][1] == 0:
+        marcar_posicao(tab,n,8)
+        return 8
     pass
