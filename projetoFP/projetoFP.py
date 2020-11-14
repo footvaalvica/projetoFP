@@ -243,6 +243,12 @@ def bloqueio2(tab,n):
                 return pos
     return pos
     
+def bifurcacao3(tab,n):
+    pass
+
+def bloqueiobifurcacao4(tab,n):
+    pass
+
 #Já definidas
 
 def centro5(tab,n):
