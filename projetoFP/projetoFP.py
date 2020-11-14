@@ -108,7 +108,7 @@ def obter_posicoes_livres(tab):
 
 def jogador_ganhador(tab):
     if eh_tabuleiro(tab) == False:
-        raise ValueError("jogador_ganhador:  o argumento e invalido")
+        raise ValueError("jogador_ganhador: o argumento e invalido")
     else:
         for i in range(3):
             if obter_linha(tab,i+1) == (1,1,1):
