@@ -131,6 +131,8 @@ def jogador_ganhador(tab):
                 return -1
             if obter_diagonal(tab,i+1) == (0,0,0):
                 return 0
+        return 0
+    return 0
 
 def marcar_posicao(tab,n,pos):
     if eh_posicao_livre(tab,pos) == False or (n != 1 and n != -1):
@@ -183,8 +185,24 @@ def escolher_posicao_auto(tab,n,strat):
         if return_var != 0:
             return return_var
     elif strat == "perfeito":
-        pass
-
+        return_var = vitoria1(tab,n)
+        if return_var != 0:
+            return return_var
+        return_var = bloqueio2(tab,n)
+        if return_var != 0:
+            return return_var
+        return_var = centro5(tab,n)
+        if return_var != 0:
+            return return_var
+        return_var = cantooposto6(tab,n)
+        if return_var != 0:
+            return return_var
+        return_var = cantovazio7(tab,n)
+        if return_var != 0:
+            return return_var
+        return_var = lateralvazio8(tab,n)
+        if return_var != 0:
+            return return_var
 #Altura de definir um monte de funções auxilares, let's go
 
 def vitoria1(tab,n):
@@ -243,13 +261,15 @@ def bloqueio2(tab,n):
                 return pos
     return pos
     
+#Falta definir
+
 def bifurcacao3(tab,n):
     pass
 
 def bloqueiobifurcacao4(tab,n):
     pass
 
-#Já definidas
+#Já feitas
 
 def centro5(tab,n):
     if tab[1][1] == 0:
@@ -301,3 +321,35 @@ def lateralvazio8(tab,n):
         marcar_posicao(tab,n,8)
         return 8
     return 0
+
+def jogo_do_galo(jogador,strat):
+    tab = ((0,0,0),(0,0,0),(0,0,0))
+    print("Bem-vindo ao JOGO DO GALO.\nO jogador joga com ''.")
+    if jogador == "O":
+        while jogador_ganhador(tab) == 0:
+            print("Turno do computador" + " (" + strat + "):")
+            tab = marcar_posicao(tab,1,(escolher_posicao_auto(tab,1,strat)))
+            print(tabuleiro_str(tab))
+            x = escolher_posicao_manual(tab)
+            tab = marcar_posicao(tab,-1,x)
+            print(tabuleiro_str(tab))
+        if jogador_ganhador(tab) == -1:
+            return '0'
+        elif jogador_ganhador(tab) == 1:
+            return 'X'
+        elif jogador_ganhador(tab) == 0:
+            return "EMPATE"
+    if jogador == "X":
+        while jogador_ganhador(tab) == 0:
+            x = escolher_posicao_manual(tab)
+            tab = marcar_posicao(tab,1,x)
+            print(tabuleiro_str(tab))
+            print("Turno do computador" + " (" + strat + "):")
+            tab = marcar_posicao(tab,-1,(escolher_posicao_auto(tab,1,strat)))
+            print(tabuleiro_str(tab))
+        if jogador_ganhador(tab) == -1:
+            return '0'
+        elif jogador_ganhador(tab) == 1:
+            return 'X'
+        elif jogador_ganhador(tab) == 0:
+            return "EMPATE"
