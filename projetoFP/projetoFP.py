@@ -167,6 +167,9 @@ def escolher_posicao_auto(tab,n,strat):
         return_var = vitoria1(tab,n)
         if return_var != 0:
             return return_var
+        return_var = bloqueio2(tab,n)
+        if return_var != 0:
+            return return_var
         return_var = centro5(tab,n)
         if return_var != 0:
             return return_var
@@ -188,20 +191,58 @@ def vitoria1(tab,n):
     pos = 0
     for i in range(3):
         linha = obter_linha(tab,(i+1))
-        if linha[0] != 0 and linha[0] == linha[2]:
+        if linha[0] != 0 and linha[0] == linha[2] and linha[1] == 0:
             pos = 2 + 3*i
             marcar_posicao(tab,n,pos)
             return pos
         coluna = obter_coluna(tab,(i+1))
-        if coluna[0] != 0 and coluna[0] == coluna[2]:
+        if coluna[0] != 0 and coluna[0] == coluna[2] and coluna[1] == 0:
             pos = 4 + i
             marcar_posicao(tab,n,pos)
-            return(pos)
-    #falta implementar diagonal
+            return pos
+    for i in range(2):
+        diagonal = obter_diagonal(tab,i+1)
+        if diagonal[0] != 0 and diagonal[0] == diagonal[2] and diagonal[1] == 0:
+            marcar_posicao(tab,n,5)
+            return 5
+    return pos
 
 def bloqueio2(tab,n):
-    pass
-
+    pos = 0
+    for i in range(3):
+        linha = obter_linha(tab,(i+1))
+        if linha[1] != 0 and linha[1] == -n:
+            if linha[0] == linha[1] and linha[2] == 0:
+                pos = 3+3*i
+                marcar_posicao(tab,n,pos)
+                return pos
+            if linha[1] == linha[2] and linha[0] == 0:
+                pos = 1+3*i
+                marcar_posicao(tab,n,pos)
+                return pos
+        coluna = obter_coluna(tab,(i+1))
+        if coluna[1] != 0 and linha[1] == -n:
+            if coluna[0] == coluna[1] and coluna[2] == 0:
+                pos = 7+i
+                marcar_posicao(tab,n,pos)
+                return pos
+            if coluna[1] == coluna[2] and coluna[0] == 0:
+                pos = 1+i
+                marcar_posicao(tab,n,pos)
+                return pos
+    for i in range(2):
+        diagonal = obter_diagonal(tab,i+1)
+        if diagonal[1] != 0 and diagonal[1] == -n:
+            if diagonal[0] == diagonal[1] and diagonal[2] == 0:
+                pos = 9 - 2*i
+                marcar_posicao(tab,n,pos)
+                return pos
+            if diagonal[1] == diagonal[2] and diagonal[0] == 0:
+                pos = 1 + 2*i
+                marcar_posicao(tab,n,pos)
+                return pos
+    return pos
+    
 #Já definidas
 
 def centro5(tab,n):
@@ -211,18 +252,19 @@ def centro5(tab,n):
     return 0
 
 def cantooposto6(tab,n):
-    if tab[0][0] == -n:
+    if tab[0][0] == -n and tab[2][2] == 0:
         marcar_posicao(tab,n,9)
         return 9
-    elif tab[0][2] == -n:
+    elif tab[0][2] == -n and tab[2][0] == 0:
         marcar_posicao(tab,n,7)
         return 7
-    elif tab[2][0] == -n:
+    elif tab[2][0] == -n and tab[0][2] == 0:
         marcar_posicao(tab,n,3)
         return 3
-    elif tab[2][2] == -n:
+    elif tab[2][2] == -n and tab[0][0] == 0:
         marcar_posicao(tab,n,1)
         return 1
+    return 0
 
 def cantovazio7(tab,n):
     if tab[0][0] == 0:
@@ -237,7 +279,7 @@ def cantovazio7(tab,n):
     elif tab[2][2] == 0:
         marcar_posicao(tab,n,9)
         return 9
-    pass
+    return 0
 
 def lateralvazio8(tab,n):
     if tab[0][1] == 0:
@@ -252,4 +294,4 @@ def lateralvazio8(tab,n):
     elif tab[2][1] == 0:
         marcar_posicao(tab,n,8)
         return 8
-    pass
+    return 0
