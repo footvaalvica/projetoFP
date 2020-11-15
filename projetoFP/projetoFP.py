@@ -15,7 +15,7 @@ def eh_tabuleiro(tab):
         for i in tab:
             if len(i) == 3:
                 for i2 in i:
-                    if i2 == 1 or i2 == 0 or i2 == -1:
+                    if isinstance(i2,bool) == False and (i2 == 1 or i2 == 0 or i2 == -1):
                         Truth = True
                     else:
                         return False
@@ -58,8 +58,8 @@ def obter_diagonal(tab, num):
 
 def tabuleiro_str(tab):
     """
-    A função está super macabra, basicamente estou a transformar a string numa lista
-    e a inserir nas posições certas
+    A funcao esta super macabra, basicamente estou a transformar a string numa lista
+    e a inserir nas posicoes certas
     """
     tabComX = []
     tabPos = (1,5,9,25,29,33,49,53,57)
@@ -149,7 +149,7 @@ def escolher_posicao_manual(tab):
     try:
         x = int(input("Turno do jogador. Escolha uma posicao livre: "))
     except:
-        raise ValueError('escolher_posicao_manual: o argumento e invalido')
+        raise ValueError('escolher_posicao_manual: a posicao introduzida e invalida')
     if eh_posicao_livre(tab,x) == False:
         raise ValueError('escolher_posicao_manual: a posicao introduzida e invalida')
     return x
@@ -206,7 +206,7 @@ def escolher_posicao_auto(tab,n,strat):
         return_var = lateralvazio8(tab,n)
         if return_var != 0:
             return return_var
-#Altura de definir um monte de funções auxilares, let's go
+#Altura de definir um monte de funcoes auxilares, let's go
 
 def vitoria1(tab,n):
     pos = 0
@@ -272,7 +272,7 @@ def bifurcacao3(tab,n):
 def bloqueiobifurcacao4(tab,n):
     pass
 
-#Já feitas
+#Ja feitas
 
 def centro5(tab,n):
     if tab[1][1] == 0:
