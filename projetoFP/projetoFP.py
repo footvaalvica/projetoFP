@@ -216,9 +216,25 @@ def vitoria1(tab,n):
             pos = 2 + 3*i
             marcar_posicao(tab,n,pos)
             return pos
+        elif linha[0] != 0 and linha[0] == linha[1] and linha[2] == 0:
+            pos = 3 + 3*i
+            marcar_posicao(tab,n,pos)
+            return pos
+        elif linha[1] != 0 and linha[1] == linha[2] and linha[0] == 0:
+            pos = 1 + 3*i
+            marcar_posicao(tab,n,pos)
+            return pos
         coluna = obter_coluna(tab,(i+1))
         if coluna[0] != 0 and coluna[0] == coluna[2] and coluna[1] == 0:
             pos = 4 + i
+            marcar_posicao(tab,n,pos)
+            return pos
+        elif coluna[0] != 0 and coluna[0] == coluna[1] and coluna[2] == 0:
+            pos = 7 + i
+            marcar_posicao(tab,n,pos)
+            return pos
+        elif coluna[1] != 0 and coluna[1] == coluna[2] and coluna[0] == 0:
+            pos = 1 + i
             marcar_posicao(tab,n,pos)
             return pos
     for i in range(2):
@@ -226,6 +242,14 @@ def vitoria1(tab,n):
         if diagonal[0] != 0 and diagonal[0] == diagonal[2] and diagonal[1] == 0:
             marcar_posicao(tab,n,5)
             return 5
+        elif diagonal[0] != 0 and diagonal[0] == diagonal[1] and diagonal[2] == 0:
+            pos = 9 - 6*i
+            marcar_posicao(tab,n,pos)
+            return pos
+        elif diagonal[1] != 0 and diagonal[1] == diagonal[2] and diagonal[0] == 0:
+            pos = 1 + 6*i
+            marcar_posicao(tab,n,pos)
+            return pos
     return pos
 
 def bloqueio2(tab,n):
