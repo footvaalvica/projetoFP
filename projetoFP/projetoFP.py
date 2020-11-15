@@ -10,13 +10,20 @@ def tabuleiroMelhor(tab):
         raise ValueError("boy we wasn't ever no joke")
 
 def eh_tabuleiro(tab):
+    Truth = False
     if isinstance(tab, tuple) and len(tab) == 3:
         for i in tab:
             if len(i) == 3:
                 for i2 in i:
                     if i2 == 1 or i2 == 0 or i2 == -1:
-                        return True
-    return False    
+                        Truth = True
+                    else:
+                        return False
+            else:
+                return False
+    else:
+        return False
+    return Truth    
 
 def eh_posicao(pos):
     return isinstance(pos, int) and 1 <= pos <= 9
@@ -44,7 +51,7 @@ def obter_diagonal(tab, num):
         if num == 1:
             diagonal += (tab[0][0],) + (tab[1][1],) + (tab[2][2],)
         if num == 2:
-            diagonal += (tab[0][2],) + (tab[1][1],) + (tab[2][0],)
+            diagonal += (tab[2][0],) + (tab[1][1],) + (tab[0][2],)
         return diagonal
     else:
         raise ValueError("obter_diagonal: algum dos argumentos e invalido")
@@ -81,7 +88,7 @@ def tabuleiro_str(tab):
 def eh_posicao_livre(tab,pos):
     tabGood = tabuleiroMelhor(tab)
     if eh_tabuleiro(tab) == False or eh_posicao(pos) == False:
-        raise ValueError("eh_posicao_livre:  algum dos argumentos e invalido")
+        raise ValueError("eh_posicao_livre: algum dos argumentos e invalido")
     else:
         counter = 0
         while counter < len(tabGood):
@@ -140,9 +147,9 @@ def escolher_posicao_manual(tab):
     if eh_tabuleiro(tab) == False:
         raise ValueError('escolher_posicao_manual: o argumento e invalido')
     try:
-        x = int(input("Turno do jogador.  Escolha uma posicao livre: "))
+        x = int(input("Turno do jogador. Escolha uma posicao livre: "))
     except:
-        raise ValueError('escolher_posicao_manual: a posicao introduzida e invalida')
+        raise ValueError('escolher_posicao_manual: o argumento e invalido')
     if eh_posicao_livre(tab,x) == False:
         raise ValueError('escolher_posicao_manual: a posicao introduzida e invalida')
     return x
@@ -248,11 +255,11 @@ def bloqueio2(tab,n):
         diagonal = obter_diagonal(tab,i+1)
         if diagonal[1] != 0 and diagonal[1] == -n:
             if diagonal[0] == diagonal[1] and diagonal[2] == 0:
-                pos = 9 - 2*i
+                pos = 9 - 6*i
                 marcar_posicao(tab,n,pos)
                 return pos
             if diagonal[1] == diagonal[2] and diagonal[0] == 0:
-                pos = 1 + 2*i
+                pos = 1 + 6*i
                 marcar_posicao(tab,n,pos)
                 return pos
     return pos
