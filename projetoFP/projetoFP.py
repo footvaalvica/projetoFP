@@ -10,20 +10,13 @@ def tabuleiroMelhor(tab):
         raise ValueError("boy we wasn't ever no joke")
 
 def eh_tabuleiro(tab):
-    Truth = False
     if isinstance(tab, tuple) and len(tab) == 3:
         for i in tab:
             if len(i) == 3:
                 for i2 in i:
                     if i2 == 1 or i2 == 0 or i2 == -1:
-                        Truth = True
-                    else:
-                        return False
-            else:
-                return False
-    else:
-        return False
-    return Truth    
+                        return True
+    return False    
 
 def eh_posicao(pos):
     return isinstance(pos, int) and 1 <= pos <= 9
@@ -36,14 +29,14 @@ def obter_coluna(tab, num):
             coluna += (i[num],)
         return coluna
     else:
-        raise ValueError("caca")
+        raise ValueError("obter_coluna: algum dos argumentos e invalido")
 
 def obter_linha(tab, num):
     if (eh_tabuleiro(tab) and isinstance(num, int) and 1 <= num <= 3) == True:
         num -= 1
         return tab[num]
     else:
-        raise ValueError("caca")
+        raise ValueError("obter_linha: algum dos argumentos e invalido")
 
 def obter_diagonal(tab, num):
     diagonal = ()
@@ -54,7 +47,7 @@ def obter_diagonal(tab, num):
             diagonal += (tab[0][2],) + (tab[1][1],) + (tab[2][0],)
         return diagonal
     else:
-        raise ValueError("caca")
+        raise ValueError("obter_diagonal: algum dos argumentos e invalido")
 
 def tabuleiro_str(tab):
     """
@@ -67,7 +60,7 @@ def tabuleiro_str(tab):
     corda = "   |   |   \n-----------\n   |   |   \n-----------\n   |   |   "
     newCorda = ""
     if eh_tabuleiro(tab) == False:
-        raise ValueError("caca")
+        raise ValueError("tabuleiro_str: o argumento e invalido")
     corda = list(corda)
     tabGood = tabuleiroMelhor(tab)
     for i in tabGood:
@@ -146,7 +139,10 @@ def marcar_posicao(tab,n,pos):
 def escolher_posicao_manual(tab):
     if eh_tabuleiro(tab) == False:
         raise ValueError('escolher_posicao_manual: o argumento e invalido')
-    x = int(input("Turno do jogador.  Escolha uma posicao livre: "))
+    try:
+        x = int(input("Turno do jogador.  Escolha uma posicao livre: "))
+    except:
+        raise ValueError('escolher_posicao_manual: a posicao introduzida e invalida')
     if eh_posicao_livre(tab,x) == False:
         raise ValueError('escolher_posicao_manual: a posicao introduzida e invalida')
     return x
@@ -324,32 +320,52 @@ def lateralvazio8(tab,n):
 
 def jogo_do_galo(jogador,strat):
     tab = ((0,0,0),(0,0,0),(0,0,0))
-    print("Bem-vindo ao JOGO DO GALO.\nO jogador joga com ''.")
+    print("Bem-vindo ao JOGO DO GALO.\nO jogador joga com '" + jogador + "'.")
+    if strat != 'basico' and strat != 'normal' and strat != 'perfeito':
+        raise ValueError("jogo_do_galo: algum dos argumentos e invalido")
     if jogador == "O":
-        while jogador_ganhador(tab) == 0:
+        while True:
             print("Turno do computador" + " (" + strat + "):")
             tab = marcar_posicao(tab,1,(escolher_posicao_auto(tab,1,strat)))
             print(tabuleiro_str(tab))
+            if jogador_ganhador(tab) == -1:
+                return '0'
+            elif jogador_ganhador(tab) == 1:
+                return 'X'
+            tabGood = tabuleiroMelhor(tab)
+            if 0 not in tabGood:
+                return "EMPATE"
             x = escolher_posicao_manual(tab)
             tab = marcar_posicao(tab,-1,x)
             print(tabuleiro_str(tab))
-        if jogador_ganhador(tab) == -1:
-            return '0'
-        elif jogador_ganhador(tab) == 1:
-            return 'X'
-        elif jogador_ganhador(tab) == 0:
-            return "EMPATE"
+            if jogador_ganhador(tab) == -1:
+                return 'O'
+            elif jogador_ganhador(tab) == 1:
+                return 'X'
+            tabGood = tabuleiroMelhor(tab)
+            if 0 not in tabGood:
+                return "EMPATE"            
     if jogador == "X":
-        while jogador_ganhador(tab) == 0:
+        while True:
             x = escolher_posicao_manual(tab)
             tab = marcar_posicao(tab,1,x)
             print(tabuleiro_str(tab))
+            if jogador_ganhador(tab) == -1:
+                return '0'
+            elif jogador_ganhador(tab) == 1:
+                return 'X'
+            tabGood = tabuleiroMelhor(tab)
+            if 0 not in tabGood:
+                return "EMPATE"
             print("Turno do computador" + " (" + strat + "):")
             tab = marcar_posicao(tab,-1,(escolher_posicao_auto(tab,1,strat)))
             print(tabuleiro_str(tab))
-        if jogador_ganhador(tab) == -1:
-            return '0'
-        elif jogador_ganhador(tab) == 1:
-            return 'X'
-        elif jogador_ganhador(tab) == 0:
-            return "EMPATE"
+            if jogador_ganhador(tab) == -1:
+                return 'O'
+            elif jogador_ganhador(tab) == 1:
+                return 'X'
+            tabGood = tabuleiroMelhor(tab)
+            if 0 not in tabGood:
+                return "EMPATE"
+    else:
+        raise ValueError("jogo_do_galo: algum dos argumentos e invalido")
