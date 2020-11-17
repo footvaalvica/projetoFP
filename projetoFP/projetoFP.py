@@ -26,7 +26,7 @@ def eh_tabuleiro(tab):
     return Truth    
 
 def eh_posicao(pos):
-    return isinstance(pos, int) and 1 <= pos <= 9
+    return isinstance(pos,bool) == False and isinstance(pos, int) and 1 <= pos <= 9
 
 def obter_coluna(tab, num):
     coluna = ()
@@ -39,7 +39,7 @@ def obter_coluna(tab, num):
         raise ValueError("obter_coluna: algum dos argumentos e invalido")
 
 def obter_linha(tab, num):
-    if (eh_tabuleiro(tab) and isinstance(num, int) and 1 <= num <= 3) == True:
+    if isinstance(num,bool) == False and (eh_tabuleiro(tab) and isinstance(num, int) and 1 <= num <= 3) == True:
         num -= 1
         return tab[num]
     else:
@@ -47,7 +47,7 @@ def obter_linha(tab, num):
 
 def obter_diagonal(tab, num):
     diagonal = ()
-    if (eh_tabuleiro(tab) and isinstance(num, int) and 1 <= num <= 2) == True:
+    if isinstance(num,bool) == False and (eh_tabuleiro(tab) and isinstance(num, int) and 1 <= num <= 2) == True:
         if num == 1:
             diagonal += (tab[0][0],) + (tab[1][1],) + (tab[2][2],)
         if num == 2:
@@ -100,7 +100,7 @@ def eh_posicao_livre(tab,pos):
 def obter_posicoes_livres(tab):
     tuploPosicoesLivres = ()
     if eh_tabuleiro(tab) == False:
-        raise ValueError("obter_posicoes_livres:  o argumento e invalido")
+        raise ValueError("obter_posicoes_livres: o argumento e invalido")
     for i in range(9):
         if eh_posicao_livre(tab,(i+1)) == True:
             tuploPosicoesLivres += ((i+1),)
