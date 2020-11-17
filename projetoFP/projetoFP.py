@@ -135,7 +135,7 @@ def jogador_ganhador(tab):
     return 0
 
 def marcar_posicao(tab,n,pos):
-    if eh_posicao_livre(tab,pos) == False or (n != 1 and n != -1):
+    if eh_posicao_livre(tab,pos) == False or isinstance(n,bool) == True or (n != 1 and n != -1):
         raise ValueError("marcar_posicao: algum dos argumentos e invalido")
     else:
         tabGood = tabuleiroMelhor(tab)
@@ -155,8 +155,149 @@ def escolher_posicao_manual(tab):
     return x
 
 def escolher_posicao_auto(tab,n,strat):
+    def vitoria1(tab,n):
+        pos = 0
+        for i in range(3):
+            linha = obter_linha(tab,(i+1))
+            if linha[0] != 0 and linha[0] == linha[2] and linha[1] == 0:
+                pos = 2 + 3*i
+                marcar_posicao(tab,n,pos)
+                return pos
+            elif linha[0] != 0 and linha[0] == linha[1] and linha[2] == 0:
+                pos = 3 + 3*i
+                marcar_posicao(tab,n,pos)
+                return pos
+            elif linha[1] != 0 and linha[1] == linha[2] and linha[0] == 0:
+                pos = 1 + 3*i
+                marcar_posicao(tab,n,pos)
+                return pos
+            coluna = obter_coluna(tab,(i+1))
+            if coluna[0] != 0 and coluna[0] == coluna[2] and coluna[1] == 0:
+                pos = 4 + i
+                marcar_posicao(tab,n,pos)
+                return pos
+            elif coluna[0] != 0 and coluna[0] == coluna[1] and coluna[2] == 0:
+                pos = 7 + i
+                marcar_posicao(tab,n,pos)
+                return pos
+            elif coluna[1] != 0 and coluna[1] == coluna[2] and coluna[0] == 0:
+                pos = 1 + i
+                marcar_posicao(tab,n,pos)
+                return pos
+        for i in range(2):
+            diagonal = obter_diagonal(tab,i+1)
+            if diagonal[0] != 0 and diagonal[0] == diagonal[2] and diagonal[1] == 0:
+                marcar_posicao(tab,n,5)
+                return 5
+            elif diagonal[0] != 0 and diagonal[0] == diagonal[1] and diagonal[2] == 0:
+                pos = 9 - 6*i
+                marcar_posicao(tab,n,pos)
+                return pos
+            elif diagonal[1] != 0 and diagonal[1] == diagonal[2] and diagonal[0] == 0:
+                pos = 1 + 6*i
+                marcar_posicao(tab,n,pos)
+                return pos
+        return pos
+
+    def bloqueio2(tab,n):
+        pos = 0
+        for i in range(3):
+            linha = obter_linha(tab,(i+1))
+            if linha[1] != 0 and linha[1] == -n:
+                if linha[0] == linha[1] and linha[2] == 0:
+                    pos = 3+3*i
+                    marcar_posicao(tab,n,pos)
+                    return pos
+                if linha[1] == linha[2] and linha[0] == 0:
+                    pos = 1+3*i
+                    marcar_posicao(tab,n,pos)
+                    return pos
+            coluna = obter_coluna(tab,(i+1))
+            if coluna[1] != 0 and linha[1] == -n:
+                if coluna[0] == coluna[1] and coluna[2] == 0:
+                    pos = 7+i
+                    marcar_posicao(tab,n,pos)
+                    return pos
+                if coluna[1] == coluna[2] and coluna[0] == 0:
+                    pos = 1+i
+                    marcar_posicao(tab,n,pos)
+                    return pos
+        for i in range(2):
+            diagonal = obter_diagonal(tab,i+1)
+            if diagonal[1] != 0 and diagonal[1] == -n:
+                if diagonal[0] == diagonal[1] and diagonal[2] == 0:
+                    pos = 9 - 6*i
+                    marcar_posicao(tab,n,pos)
+                    return pos
+                if diagonal[1] == diagonal[2] and diagonal[0] == 0:
+                    pos = 1 + 6*i
+                    marcar_posicao(tab,n,pos)
+                    return pos
+        return pos
+        
+    #Falta definir
+
+    def bifurcacao3(tab,n):
+        pass
+
+    def bloqueiobifurcacao4(tab,n):
+        pass
+
+    #Ja feitas
+
+    def centro5(tab,n):
+        if tab[1][1] == 0:
+            marcar_posicao(tab,n,5)
+            return 5
+        return 0
+
+    def cantooposto6(tab,n):
+        if tab[0][0] == -n and tab[2][2] == 0:
+            marcar_posicao(tab,n,9)
+            return 9
+        elif tab[0][2] == -n and tab[2][0] == 0:
+            marcar_posicao(tab,n,7)
+            return 7
+        elif tab[2][0] == -n and tab[0][2] == 0:
+            marcar_posicao(tab,n,3)
+            return 3
+        elif tab[2][2] == -n and tab[0][0] == 0:
+            marcar_posicao(tab,n,1)
+            return 1
+        return 0
+
+    def cantovazio7(tab,n):
+        if tab[0][0] == 0:
+            marcar_posicao(tab,n,1)
+            return 1
+        elif tab[0][2] == 0:
+            marcar_posicao(tab,n,3)
+            return 3
+        elif tab[2][0] == 0:
+            marcar_posicao(tab,n,7)
+            return 7
+        elif tab[2][2] == 0:
+            marcar_posicao(tab,n,9)
+            return 9
+        return 0
+
+    def lateralvazio8(tab,n):
+        if tab[0][1] == 0:
+            marcar_posicao(tab,n,2)
+            return 2
+        elif tab[1][0] == 0:
+            marcar_posicao(tab,n,4)
+            return 4
+        elif tab[1][2] == 0:
+            marcar_posicao(tab,n,6)
+            return 6
+        elif tab[2][1] == 0:
+            marcar_posicao(tab,n,8)
+            return 8
+        return 0
+
     return_var = 0
-    if eh_tabuleiro(tab) == False or (n != 1 and n != -1) or (strat != 'basico' and strat != 'normal' and strat != 'perfeito'):
+    if eh_tabuleiro(tab) == False or isinstance(n,bool) == True or (n != 1 and n != -1) or (strat != 'basico' and strat != 'normal' and strat != 'perfeito'):
         raise ValueError("escolher_posicao_auto: algum dos argumentos e invalido")
     if strat == "basico":
         return_var = centro5(tab,n)
@@ -206,148 +347,6 @@ def escolher_posicao_auto(tab,n,strat):
         return_var = lateralvazio8(tab,n)
         if return_var != 0:
             return return_var
-#Altura de definir um monte de funcoes auxilares, let's go
-
-def vitoria1(tab,n):
-    pos = 0
-    for i in range(3):
-        linha = obter_linha(tab,(i+1))
-        if linha[0] != 0 and linha[0] == linha[2] and linha[1] == 0:
-            pos = 2 + 3*i
-            marcar_posicao(tab,n,pos)
-            return pos
-        elif linha[0] != 0 and linha[0] == linha[1] and linha[2] == 0:
-            pos = 3 + 3*i
-            marcar_posicao(tab,n,pos)
-            return pos
-        elif linha[1] != 0 and linha[1] == linha[2] and linha[0] == 0:
-            pos = 1 + 3*i
-            marcar_posicao(tab,n,pos)
-            return pos
-        coluna = obter_coluna(tab,(i+1))
-        if coluna[0] != 0 and coluna[0] == coluna[2] and coluna[1] == 0:
-            pos = 4 + i
-            marcar_posicao(tab,n,pos)
-            return pos
-        elif coluna[0] != 0 and coluna[0] == coluna[1] and coluna[2] == 0:
-            pos = 7 + i
-            marcar_posicao(tab,n,pos)
-            return pos
-        elif coluna[1] != 0 and coluna[1] == coluna[2] and coluna[0] == 0:
-            pos = 1 + i
-            marcar_posicao(tab,n,pos)
-            return pos
-    for i in range(2):
-        diagonal = obter_diagonal(tab,i+1)
-        if diagonal[0] != 0 and diagonal[0] == diagonal[2] and diagonal[1] == 0:
-            marcar_posicao(tab,n,5)
-            return 5
-        elif diagonal[0] != 0 and diagonal[0] == diagonal[1] and diagonal[2] == 0:
-            pos = 9 - 6*i
-            marcar_posicao(tab,n,pos)
-            return pos
-        elif diagonal[1] != 0 and diagonal[1] == diagonal[2] and diagonal[0] == 0:
-            pos = 1 + 6*i
-            marcar_posicao(tab,n,pos)
-            return pos
-    return pos
-
-def bloqueio2(tab,n):
-    pos = 0
-    for i in range(3):
-        linha = obter_linha(tab,(i+1))
-        if linha[1] != 0 and linha[1] == -n:
-            if linha[0] == linha[1] and linha[2] == 0:
-                pos = 3+3*i
-                marcar_posicao(tab,n,pos)
-                return pos
-            if linha[1] == linha[2] and linha[0] == 0:
-                pos = 1+3*i
-                marcar_posicao(tab,n,pos)
-                return pos
-        coluna = obter_coluna(tab,(i+1))
-        if coluna[1] != 0 and linha[1] == -n:
-            if coluna[0] == coluna[1] and coluna[2] == 0:
-                pos = 7+i
-                marcar_posicao(tab,n,pos)
-                return pos
-            if coluna[1] == coluna[2] and coluna[0] == 0:
-                pos = 1+i
-                marcar_posicao(tab,n,pos)
-                return pos
-    for i in range(2):
-        diagonal = obter_diagonal(tab,i+1)
-        if diagonal[1] != 0 and diagonal[1] == -n:
-            if diagonal[0] == diagonal[1] and diagonal[2] == 0:
-                pos = 9 - 6*i
-                marcar_posicao(tab,n,pos)
-                return pos
-            if diagonal[1] == diagonal[2] and diagonal[0] == 0:
-                pos = 1 + 6*i
-                marcar_posicao(tab,n,pos)
-                return pos
-    return pos
-    
-#Falta definir
-
-def bifurcacao3(tab,n):
-    pass
-
-def bloqueiobifurcacao4(tab,n):
-    pass
-
-#Ja feitas
-
-def centro5(tab,n):
-    if tab[1][1] == 0:
-        marcar_posicao(tab,n,5)
-        return 5
-    return 0
-
-def cantooposto6(tab,n):
-    if tab[0][0] == -n and tab[2][2] == 0:
-        marcar_posicao(tab,n,9)
-        return 9
-    elif tab[0][2] == -n and tab[2][0] == 0:
-        marcar_posicao(tab,n,7)
-        return 7
-    elif tab[2][0] == -n and tab[0][2] == 0:
-        marcar_posicao(tab,n,3)
-        return 3
-    elif tab[2][2] == -n and tab[0][0] == 0:
-        marcar_posicao(tab,n,1)
-        return 1
-    return 0
-
-def cantovazio7(tab,n):
-    if tab[0][0] == 0:
-        marcar_posicao(tab,n,1)
-        return 1
-    elif tab[0][2] == 0:
-        marcar_posicao(tab,n,3)
-        return 3
-    elif tab[2][0] == 0:
-        marcar_posicao(tab,n,7)
-        return 7
-    elif tab[2][2] == 0:
-        marcar_posicao(tab,n,9)
-        return 9
-    return 0
-
-def lateralvazio8(tab,n):
-    if tab[0][1] == 0:
-        marcar_posicao(tab,n,2)
-        return 2
-    elif tab[1][0] == 0:
-        marcar_posicao(tab,n,4)
-        return 4
-    elif tab[1][2] == 0:
-        marcar_posicao(tab,n,6)
-        return 6
-    elif tab[2][1] == 0:
-        marcar_posicao(tab,n,8)
-        return 8
-    return 0
 
 def jogo_do_galo(jogador,strat):
     tab = ((0,0,0),(0,0,0),(0,0,0))
