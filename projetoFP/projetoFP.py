@@ -9,7 +9,7 @@ def tabuleiroMelhor(tab):
     else:
         raise ValueError("boy we wasn't ever no joke")
 
-def eh_tabuleiro(tab):
+def eh_tabuleiro(tab, *therest):
     Truth = False
     if isinstance(tab, tuple) and len(tab) == 3:
         for i in tab:
@@ -30,7 +30,7 @@ def eh_posicao(pos):
 
 def obter_coluna(tab, num):
     coluna = ()
-    if (eh_tabuleiro(tab) and isinstance(num, int) and 1 <= num <= 3) == True:
+    if isinstance(num,bool) == False and (eh_tabuleiro(tab) and isinstance(num, int) and 1 <= num <= 3) == True:
         num -= 1
         for i in tab:
             coluna += (i[num],)
