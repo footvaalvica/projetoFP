@@ -11,7 +11,7 @@ def tabuleiroMelhor(tab):
 
 def eh_tabuleiro(tab, *therest):
     Truth = False
-    if isinstance(tab, tuple) and len(tab) == 3:
+    if isinstance(tab, tuple) == True and len(tab) == 3:
         for i in tab:
             if len(i) == 3:
                 for i2 in i:
@@ -86,10 +86,10 @@ def tabuleiro_str(tab):
     return newCorda
 
 def eh_posicao_livre(tab,pos):
-    tabGood = tabuleiroMelhor(tab)
     if eh_tabuleiro(tab) == False or eh_posicao(pos) == False:
         raise ValueError("eh_posicao_livre: algum dos argumentos e invalido")
     else:
+        tabGood = tabuleiroMelhor(tab)
         counter = 0
         while counter < len(tabGood):
             if (counter + 1) == pos and tabGood[counter] == 0:
@@ -144,6 +144,18 @@ def marcar_posicao(tab,n,pos):
     return tuple(tabGood[:3]),tuple(tabGood[3:6]),tuple(tabGood[6:9])
 
 def escolher_posicao_manual(tab):
+    def eh_posicao_livre(tab,pos):
+        tabGood = tabuleiroMelhor(tab)
+        if eh_tabuleiro(tab) == False or eh_posicao(pos) == False:
+            raise ValueError("escolher_posicao_manual: a posicao introduzida e invalida")
+        else:
+            counter = 0
+            while counter < len(tabGood):
+                if (counter + 1) == pos and tabGood[counter] == 0:
+                    return True
+                counter += 1
+            return False
+
     if eh_tabuleiro(tab) == False:
         raise ValueError('escolher_posicao_manual: o argumento e invalido')
     try:
@@ -208,8 +220,12 @@ def escolher_posicao_auto(tab,n,strat):
                     pos = 3+3*i
                     marcar_posicao(tab,n,pos)
                     return pos
-                if linha[1] == linha[2] and linha[0] == 0:
+                elif linha[1] == linha[2] and linha[0] == 0:
                     pos = 1+3*i
+                    marcar_posicao(tab,n,pos)
+                    return pos
+                elif linha[0] == linha[2] and linha[1] == 0:
+                    pos = 2 + 3*i
                     marcar_posicao(tab,n,pos)
                     return pos
             coluna = obter_coluna(tab,(i+1))
@@ -222,6 +238,10 @@ def escolher_posicao_auto(tab,n,strat):
                     pos = 1+i
                     marcar_posicao(tab,n,pos)
                     return pos
+                elif coluna[0] == coluna[2] and coluna[1] == 0:
+                    pos = 4 + i
+                    marcar_posicao(tab,n,pos)
+                    return pos
         for i in range(2):
             diagonal = obter_diagonal(tab,i+1)
             if diagonal[1] != 0 and diagonal[1] == -n:
@@ -229,10 +249,13 @@ def escolher_posicao_auto(tab,n,strat):
                     pos = 9 - 6*i
                     marcar_posicao(tab,n,pos)
                     return pos
-                if diagonal[1] == diagonal[2] and diagonal[0] == 0:
+                elif diagonal[1] == diagonal[2] and diagonal[0] == 0:
                     pos = 1 + 6*i
                     marcar_posicao(tab,n,pos)
                     return pos
+                elif diagonal[0] == diagonal[2] and diagonal[1] == 0:
+                    marcar_posicao(tab,n,5)
+                    return 5
         return pos
         
     #Falta definir
