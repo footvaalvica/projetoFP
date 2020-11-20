@@ -135,6 +135,19 @@ def jogador_ganhador(tab):
     return 0
 
 def marcar_posicao(tab,n,pos):
+    def eh_posicao_livre(tab,pos):
+        if eh_tabuleiro(tab) == False or eh_posicao(pos) == False:
+            raise ValueError("marcar_posicao: algum dos argumentos e invalido")
+        else:
+            tabGood = tabuleiroMelhor(tab)
+            counter = 0
+            while counter < len(tabGood):
+                if (counter + 1) == pos and tabGood[counter] == 0:
+                    return True
+                counter += 1
+            return False
+    
+
     if eh_posicao_livre(tab,pos) == False or isinstance(n,bool) == True or (n != 1 and n != -1):
         raise ValueError("marcar_posicao: algum dos argumentos e invalido")
     else:
