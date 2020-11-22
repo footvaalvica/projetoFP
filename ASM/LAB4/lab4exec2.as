@@ -12,7 +12,6 @@ LCD_WRITE       EQU     FFF5h	; write on LCD
 LCD_CURSOR      EQU     FFF4h	; position LCD cursor
 ; Stack
 SP_INIT         EQU     7000h	; initial stack location
-                OPT     ASCII
 
 ;=================================================================
 ; GLOBAL VARIABLES
@@ -51,16 +50,20 @@ PROCESS_CHAR:   ; SAVE CONTEXT
 				; ----------------------
                 ; VERIFY IF IT IS A DIGIT...
                 
-                MVI     R1,'>'
-                PUSH    R5
+                MVI     R1,'R'
+                DEC     R6
+                STOR    M[R6],R5
                 CMP     R2,R1
                 JAL.Z   SHIFTRIGHT
-                POP     R5
-                MVI     R1,'<'
-                PUSH    R5
+                LOAD    R5,M[R6]
+                INC     R6
+                MVI     R1,'L'
+                DEC     R6
+                STOR    M[R6],R5
                 CMP     R2,R1
                 JAL.Z   SHIFTLEFT
-                POP     R5
+                LOAD    R5,M[R6]
+                INC     R6
                 MVI     R1,'9'
                 CMP     R2,R1
                 BR.P    .RETURN         ; if key>'9' go out
@@ -79,18 +82,20 @@ PROCESS_CHAR:   ; SAVE CONTEXT
                 ; RETRIEVE SAVED VALUE
                 LOAD    R1,M[R6]
                 INC     R6
-                JAL     WRITE_ON_LCD
+                JAL     WRITE_ON_LCDL
                 ; RELOAD CONTEXT & EXIT
                 LOAD    R7,M[R6]
                 INC     R6
 .RETURN:        JMP     R7
 
 SHIFTRIGHT:     SHRA    R5
-                MOV     R1,0Eh
-                JAL     WRITE_ON_LCD
-                MOV     R1,0Dh
-                JAL     WRITE_ON_LCD
                 MOV     R1,R5
+                JAL     WRITE_ON_LCD
+                MVI     R1,0Dh
+                JAL     WRITE_ON_LCD
+                MVI     R1,01h
+                JAL     WRITE_ON_LCD
+                MVI     R1,8Bh
                 JAL     WRITE_ON_LCD
                 ; RELOAD CONTEXT & EXIT
                 LOAD    R7,M[R6]
@@ -98,11 +103,13 @@ SHIFTRIGHT:     SHRA    R5
                 BR      MAIN.LOOP
                 
 SHIFTLEFT:      SHLA    R5
-                MOV     R1,0Ch
-                JAL     WRITE_ON_LCD
-                MOV     R1,0Dh
-                JAL     WRITE_ON_LCD
                 MOV     R1,R5
+                JAL     WRITE_ON_LCD
+                MVI     R1,0Dh
+                JAL     WRITE_ON_LCD
+                MVI     R1,01h
+                JAL     WRITE_ON_LCD
+                MVI     R1,7Bh
                 JAL     WRITE_ON_LCD
                 ; RELOAD CONTEXT & EXIT
                 LOAD    R7,M[R6]
@@ -119,7 +126,7 @@ WRITE_ON_LCD:   ; SAVE CONTEXT
 
                 ; POSITION CURSOR
                 MVI     R2, LCD_CURSOR
-                MVI     R3, 8000h
+                MVI     R3, 8001h
                 STOR    M[R2],R3
 				
                 ; CONVERT INPUT DIGIT TO CHAR
@@ -129,6 +136,41 @@ WRITE_ON_LCD:   ; SAVE CONTEXT
                 MVI     R3, LCD_NUMS
 
                 MVI     R5,4
+.LOOP:          ; INSERT VALUE
+                MVI     R2, LCD_WRITE
+                STOR    M[R2],R1
+                LOAD    R2, M[R3]
+                STOR    M[R3],R1
+                ; GO TO NEXT
+                MOV     R1,R2
+                INC     R3
+				; LOOP
+                DEC     R5
+                BR.P    .LOOP
+                
+                
+                ; RESTORE CONTEXT AND EXIT
+                LOAD    R5,M[R6]
+                INC     R6
+                
+                JMP     R7
+
+WRITE_ON_LCDL:   ; SAVE CONTEXT
+                DEC     R6
+                STOR    M[R6],R5
+
+                ; POSITION CURSOR
+                MVI     R2, LCD_CURSOR
+                MVI     R3, 8000h
+                STOR    M[R2],R3
+				
+                ; CONVERT INPUT DIGIT TO CHAR
+                MVI     R2,'0'
+                ADD     R1,R1,R2
+                ; LOAD BASE ADDRESS
+                MVI     R3, LCD_NUMS
+
+                MVI     R5,1
 .LOOP:          ; INSERT VALUE
                 MVI     R2, LCD_WRITE
                 STOR    M[R2],R1
