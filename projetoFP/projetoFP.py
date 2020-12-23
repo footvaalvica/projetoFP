@@ -129,8 +129,12 @@ def remove_peca(t, p):
     t[posicao_para_str(p)] = ' '
     return t
 
+def mais_que_um_vencedor(t):
+    lista = todas_soma_pecas_em_linha(t)
+
 def move_peca(t, p1, p2):
     t[posicao_para_str(p2)] = obter_peca(t, p1)
+    t[posicao_para_str(p1)] = 0
     return t
 
 def eh_tabuleiro(t):
@@ -139,6 +143,9 @@ def eh_tabuleiro(t):
     properList = ['a1', 'b1', 'c1', 'a2', 'b2', 'c2', 'a3', 'b3', 'c3']
 
     if sorted(list(t)) != sorted(properList):
+        return False
+    
+    if obter_ganhador(t) == False:
         return False
 
     for key in t:  
@@ -168,28 +175,68 @@ def tabuleiros_iguais(t1, t2):
     
 #def tabuleiro_para_str
 def tabuleiro_para_str(t):
-    stringDSd = """   a   b   c
-1 [ ]-[ ]-[ ]
-   | \ | / |  
-2 [ ]-[ ]-[ ]
+    stringTab = """   a   b   c
+1 --
+   | \ | / |
+2 --
    | / | \ |
-3 [ ]-[ ]-[ ]"""
+3 --"""
 
-    #acabar de fazer tabuleiro hardcoded
-
-    return stringDSd
-
+    return stringTab[:15] + peca_para_str(t['a1']) + stringTab[15:16] + \
+    peca_para_str(t['b1']) + stringTab[16:17] + peca_para_str(t['c1']) + \
+    stringTab[17:33] + peca_para_str(t['a2']) + stringTab[33:34] + \
+    peca_para_str(t['b2']) + stringTab[34:35] + peca_para_str(t['c2']) + \
+    stringTab[35:51] + peca_para_str(t['a3']) + stringTab[51:52] + \
+    peca_para_str(t['b3']) + stringTab[52:53] + peca_para_str(t['c3'])
+    
 #def tuplo_para_tabuleiro
 
-def obter_ganhador(t):
+def tuplo_para_tabuleiro(t):
+    tabuleiro = cria_tabuleiro()
+    tabuleiro['a1'] = t[0][0]
+    tabuleiro['b1'] = t[0][1]
+    tabuleiro['c1'] = t[0][2]
+    tabuleiro['a2'] = t[1][0]
+    tabuleiro['b2'] = t[1][1]
+    tabuleiro['c2'] = t[1][2]
+    tabuleiro['a3'] = t[2][0]
+    tabuleiro['b3'] = t[2][1]
+    tabuleiro['c3'] = t[2][2]
+    return tabuleiro
+
+def obter_ganhador(t): 
     lista = todas_soma_pecas_em_linha(t)
-    if abs(sum(lista)) >= 3 and sum(lista) > 0:
+    nump3 = 0
+    numn3 = 0
+
+    if 3 in lista:
+        nump3 += 1
+
+    if -3 in lista:
+        numn3 += 1
+
+    #Devolve falso se houver 2 ganhadores
+    if numn3 == nump3:
+        return False
+
+    if 3 in lista:
         return cria_peca('X')
-    elif abs(sum(lista)) >= 3 and sum(lista) < 0:
+    elif -3 in lista:
         return cria_peca('O')
     else:
         return cria_peca(' ')
 
-#def obter_posicoes_livres
+def obter_posicoes_livres(t):
+    tuploPos = ()
+    for i in t:
+        if t[i] == 0:
+            tuploPos += (i,)
 
-#def obter_posicoes_jogador
+    return tuploPos
+
+def obter_posicoes_jogador(t,j):
+    tuploPos = ()
+    for i in t:
+        if t[i] == peca_para_inteiro(j):
+            tuploPos += (i,)
+
