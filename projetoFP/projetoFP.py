@@ -12,6 +12,9 @@ def cria_posicao(c,l):
 def obter_pos_c(p):
     return p[0]
 
+def str_para_posicao(s):
+    return cria_posicao(s[:1], s[1:])
+
 def obter_pos_l(p):
     return p[1]
 
@@ -240,3 +243,33 @@ def obter_posicoes_jogador(t,j):
         if t[i] == peca_para_inteiro(j):
             tuploPos += (i,)
 
+def obter_movimento_manual(t,j):
+    if len(obter_posicoes_livres(t)) > 3:
+        pos = input('Turno do jogador. Escolha uma posicao: ')
+        if pos not in obter_posicoes_livres(t):
+            raise ValueError("obter_movimento_manual: escolha invalida")
+        else:
+            return (str_para_posicao(pos),)
+    else:
+        mov = input('Turno do jogador. Escolha um movimento: ')
+        p1 = mov[:2]
+        p2 = mov[2:]
+        if p2 not in obter_posicoes_livres(t) or t[p1] != j:
+            raise ValueError("obter_movimento_manual: escolha invalida")
+        else:
+            return (str_para_posicao(p1), str_para_posicao(p2))
+
+def obter_movimento_auto(t,j,s):
+    #devolve tuplo
+    if s == 'facil':
+        if len(obter_posicoes_livres(t)) > 3:
+            #fase de colocacao
+            pass
+        else:
+            #fase de movimento
+            pass
+    elif s == 'normal':
+        pass
+
+    elif s == 'dificil':
+        pass
