@@ -1,8 +1,6 @@
 #TAD Posicao
 #Lista com [a,d]
 
-from functools import reduce
-
 def cria_posicao(c,l):
     if type(c) == type(l) == str and 97 <= ord(c) <= 99 and 3 >= int(l) > 0:
         return [c,l]
@@ -19,10 +17,11 @@ def obter_pos_l(p):
     return p[1]
 
 def cria_copia_posicao(p):
-    return p
+    return p.copy()
 
 def eh_posicao(p):
-    return isinstance(p, list) and len(p) == 2 and type(p[0]) == type(p[1]) == str and 97 <= ord(p[0]) <= 99 and 3 >= int(p[1]) > 0
+    return isinstance(p, list) and len(p) == 2 and type(p[0]) == \
+    type(p[1]) == str and 97 <= ord(p[0]) <= 99 and 3 >= int(p[1]) > 0
 
 def posicoes_iguais(p1, p2):
     return p1 == p2 and eh_posicao(p1) and eh_posicao(p2)
@@ -30,18 +29,21 @@ def posicoes_iguais(p1, p2):
 def posicao_para_str(p):
     return str(obter_pos_c(p) + obter_pos_l(p))
 
+
+#FUNCAO ALTO NIVEL
 def obter_posicoes_adjacentes(p):
     posicoes = {
-        'a1':(['a','2'], ['b', '1'], ['b','2']),
-        'a2':(['a','1'], ['a', '3'], ['b','2']),
-        'a3':(['a','2'], ['b', '3'], ['b','2']),
+        'a1':(['b','1'], ['a', '2'], ['b','2']),
+        'a2':(['a','1'], ['b', '2'], ['a','3']),
+        'a3':(['a','2'], ['b', '2'], ['b','3']),
         'b1':(['a','1'], ['c', '1'], ['b','2']),
-        'b2':(['a','1'], ['a', '2'], ['a','3'], 
-        ['b','1'], ['b', '3'], ['c','1'], ['c','2'], ['c', '3']),
-        'b3':(['a','3'], ['c', '3'], ['b','2']),
-        'c1':(['b','1'], ['c', '2'], ['b','2']),
-        'c2':(['c','1'], ['c', '3'], ['b','2']),
-        'c3':(['b','3'], ['c', '2'], ['b','2'])
+        'b2':(['a','1'], ['b', '1'], ['c', '1'],
+              ['a','2'], ['c', '2'], ['a', '3'],
+              ['b','3'], ['c',' 3']),
+        'b3':(['b','2'], ['a', '3'], ['c','3']),
+        'c1':(['b','1'], ['b', '2'], ['c','2']),
+        'c2':(['b','2'], ['c', '1'], ['c','3']),
+        'c3':(['b','2'], ['c', '2'], ['b','3'])
     }
     
     return posicoes[posicao_para_str(p)]
@@ -60,7 +62,7 @@ def cria_peca(j):
         raise ValueError('cria_peca: argumento invalido')
 
 def cria_copia_peca(j):
-    return j
+    return j.copy()
 
 def eh_peca(j):
     return type(j) == int and -1 <= j <= 1
@@ -83,15 +85,22 @@ def peca_para_inteiro(j):
 
 def cria_tabuleiro():
     tabuleiro = {
-        'a1':0, 'b1':0, 'c1':0,
-        'a2':0, 'b2':0, 'c2':0,
-        'a3':0, 'b3':0, 'c3':0
+        'a1':0, 
+        'b1':0, 
+        'c1':0,
+        'a2':0, 
+        'b2':0, 
+        'c2':0,
+        'a3':0, 
+        'b3':0, 
+        'c3':0
     }
 
     return tabuleiro
 
 def cria_copia_tabuleiro(t):
-    return t
+    t1 = t.copy()
+    return t1
 
 def obter_peca(t, p):
     return t[posicao_para_str(p)]
@@ -207,6 +216,8 @@ def tuplo_para_tabuleiro(t):
     tabuleiro['c3'] = t[2][2]
     return tabuleiro
 
+
+#FUNCAO ALTO NIVEL
 def obter_ganhador(t): 
     lista = todas_soma_pecas_em_linha(t)
     nump3 = 0
@@ -219,7 +230,7 @@ def obter_ganhador(t):
         numn3 += 1
 
     #Devolve falso se houver 2 ganhadores
-    if numn3 == nump3:
+    if numn3 == nump3 and numn3 != 0:
         return False
 
     if 3 in lista:
@@ -229,24 +240,28 @@ def obter_ganhador(t):
     else:
         return cria_peca(' ')
 
+#FUNCAO ALTO NIVEL MAS NAO RESPEITA ABSTRACAO
 def obter_posicoes_livres(t):
-    tuploPos = ()
+    listTuploPos = []
     for i in t:
         if t[i] == 0:
-            tuploPos += (i,)
+            listTuploPos.append([i[0],i[1]])
 
-    return tuploPos
+    return tuple(listTuploPos)
 
+#FUNCAO ALTO NIVEL MAS NAO RESPEITA ABSTRACAO
 def obter_posicoes_jogador(t,j):
     tuploPos = ()
     for i in t:
         if t[i] == peca_para_inteiro(j):
             tuploPos += (i,)
+    
+    return tuploPos
 
 def obter_movimento_manual(t,j):
     if len(obter_posicoes_livres(t)) > 3:
         pos = input('Turno do jogador. Escolha uma posicao: ')
-        if pos not in obter_posicoes_livres(t):
+        if pos not in tuple(posicao_para_str(p) for p in obter_posicoes_livres(t)):
             raise ValueError("obter_movimento_manual: escolha invalida")
         else:
             return (str_para_posicao(pos),)
@@ -254,7 +269,7 @@ def obter_movimento_manual(t,j):
         mov = input('Turno do jogador. Escolha um movimento: ')
         p1 = mov[:2]
         p2 = mov[2:]
-        if p2 not in obter_posicoes_livres(t) or t[p1] != j:
+        if p2 not in tuple(posicao_para_str(p) for p in obter_posicoes_livres(t)) or t[p1] != j:
             raise ValueError("obter_movimento_manual: escolha invalida")
         else:
             return (str_para_posicao(p1), str_para_posicao(p2))
@@ -262,14 +277,158 @@ def obter_movimento_manual(t,j):
 def obter_movimento_auto(t,j,s):
     #devolve tuplo
     if s == 'facil':
-        if len(obter_posicoes_livres(t)) > 3:
-            #fase de colocacao
-            pass
+        if len(obter_posicoes_livres(t)) > 3:          
+            return colocacao(t,j)
         else:
-            #fase de movimento
-            pass
-    elif s == 'normal':
-        pass
+            return movimentoFacil(t,j)
 
+    elif s == 'normal':
+        if len(obter_posicoes_livres(t)) > 3:       
+           return colocacao(t,j)
+        else:
+            result = minimax(t,j,1)
+            if result[0] != 0:
+                choppedResult = result[1]
+                listPos = []
+                for i in choppedResult:
+                    listPos.append(cria_posicao(i[0], i[1]))
+                return tuple(listPos)
+
+                return movimentoFacil(t,j)
     elif s == 'dificil':
-        pass
+        if len(obter_posicoes_livres(t)) > 3:          
+            return colocacao(t,j)
+        else:
+            result = minimax(t,j,5)
+            choppedResult = result[1][:2]
+            listPos = []
+            for i in choppedResult:
+                listPos.append(cria_posicao(i[0], i[1]))
+            return tuple(listPos)
+
+def movimentoFacil(t,j):
+    for i in obter_posicoes_jogador(t,j):
+        for e in obter_posicoes_adjacentes(i):
+            if e in obter_posicoes_livres(t):
+                return (cria_posicao(i[0],i[1]), cria_posicao(e[0],e[1]))
+
+def colocacao(t,j):
+    #VITÓRIA
+    result = vitoria(t,j)
+    if result is not None:
+        return vitoria(t,j)
+    #BLOQUEIO, igual a vitoria mas com -j
+    result = vitoria(t,-j)
+    if result is not None:
+        return vitoria(t,-j)
+    #CENTRO
+    if 'b2' in tuple(posicao_para_str(p) for p in obter_posicoes_livres(t)):
+        return (cria_posicao('b', '2'),)
+    #CANTOVAZIO
+    if 'a1' in tuple(posicao_para_str(p) for p in obter_posicoes_livres(t)):
+        return (cria_posicao('a', '1'),)
+    if 'c1' in tuple(posicao_para_str(p) for p in obter_posicoes_livres(t)):
+        return (cria_posicao('c', '1'),)
+    if 'a3' in tuple(posicao_para_str(p) for p in obter_posicoes_livres(t)):
+        return (cria_posicao('a', '3'),)
+    if 'c3' in tuple(posicao_para_str(p) for p in obter_posicoes_livres(t)):
+        return (cria_posicao('c', '3'),)
+    #LATERALVAZIO
+    if 'b1' in tuple(posicao_para_str(p) for p in obter_posicoes_livres(t)):
+        return (cria_posicao('b', '1'),)
+    if 'a2' in tuple(posicao_para_str(p) for p in obter_posicoes_livres(t)):
+        return (cria_posicao('a', '2'),)
+    if 'c2' in tuple(posicao_para_str(p) for p in obter_posicoes_livres(t)):
+        return (cria_posicao('c', '2'),)
+    if 'b3' in tuple(posicao_para_str(p) for p in obter_posicoes_livres(t)):
+        return (cria_posicao('b', '3'),)
+
+def vitoria(t,j):
+    vetorListaA = list(obter_vetor(t,'a'))
+    vetorListaACopy = vetorListaA.copy()
+    if 0 in vetorListaA:
+        vetorListaACopy.pop(vetorListaACopy.index(0))
+    if 0 in vetorListaA and vetorListaACopy[0] == vetorListaACopy[1] == j:
+        return (cria_posicao('a',(str(obter_vetor(t,'a').index(0)+1))),)
+    vetorListaB = list(obter_vetor(t,'b'))
+    vetorListaBCopy = vetorListaB.copy()
+    if 0 in vetorListaB:
+        vetorListaBCopy.pop(vetorListaBCopy.index(0))
+    if 0 in vetorListaB and vetorListaBCopy[0] == vetorListaBCopy[1] == j:
+        return (cria_posicao('b',(str(obter_vetor(t,'b').index(0)+1))),)
+    vetorListaC = list(obter_vetor(t,'c'))
+    vetorListaCCopy = vetorListaC.copy()
+    if 0 in vetorListaC:
+        vetorListaCCopy.pop(vetorListaCCopy.index(0))
+    if 0 in vetorListaC and vetorListaCCopy[0] == vetorListaCCopy[1] == j:
+        return (cria_posicao('c',(str(obter_vetor(t,'c').index(0)+1))),)
+    vetorLista1 = list(obter_vetor(t,'1'))
+    vetorLista1Copy = vetorLista1.copy()
+    if 0 in vetorLista1:
+        vetorLista1Copy.pop(vetorLista1Copy.index(0))
+    if 0 in vetorLista1 and vetorLista1Copy[0] == vetorLista1Copy[1] == j:
+        return (cria_posicao(chr(((obter_vetor(t,'1').index(0)+97))),'1'),)
+    vetorLista2 = list(obter_vetor(t,'2'))
+    vetorLista2Copy = vetorLista2.copy()
+    if 0 in vetorLista2:
+        vetorLista2Copy.pop(vetorLista2Copy.index(0))
+    if 0 in vetorLista2 and vetorLista2Copy[0] == vetorLista2Copy[1] == j:
+        return (cria_posicao(chr(((obter_vetor(t,'2').index(0)+97))),'2'),)
+    vetorLista3 = list(obter_vetor(t,'3'))
+    vetorLista3Copy = vetorLista3.copy()
+    if 0 in vetorLista3:
+        vetorLista3Copy.pop(vetorLista3Copy.index(0))
+    if 0 in vetorLista3 and vetorLista3Copy[0] == vetorLista3Copy[1] == j:
+        return (cria_posicao(chr(((obter_vetor(t,'3').index(0)+97))),'3'),)
+
+def minimax(t,j,depth,*seq):
+    if obter_ganhador(t) != 0 or depth == 0:
+        return obter_ganhador(t), seq
+    else:
+        bestResult = (-(obter_ganhador(t)))
+        melhorSeqMovimentos = ()
+        for i in obter_posicoes_jogador(t,j):
+            for e in obter_posicoes_adjacentes(i):
+                if e in obter_posicoes_livres(t):
+                    novoTabuleiro = cria_copia_tabuleiro(t)
+                    novoMovimento = str(i), str(posicao_para_str(e))
+                    novoTabuleiro = move_peca(novoTabuleiro, i, posicao_para_str(e))
+                    novoResultado,novaSeqMovimentos = \
+                    minimax(novoTabuleiro, -j, depth-1, *(seq+novoMovimento))
+                    if melhorSeqMovimentos == () \
+                    or (j == 1 and novoResultado > bestResult) \
+                    or (j == -1 and novoResultado < bestResult):
+                        bestResult, melhorSeqMovimentos = \
+                        novoResultado,novaSeqMovimentos
+        return bestResult,melhorSeqMovimentos
+
+def moinho(peca, dif):
+    t = cria_tabuleiro()
+    j = cria_peca(peca[1:2])
+    gameActive = True
+    ganhador = 0
+    print("Bem-vindo ao JOGO DO MOINHO. Nivel de dificuldade " + dif + ".")
+    print(tabuleiro_para_str(t))
+    while gameActive:
+        move = obter_movimento_manual(t,j)
+        if len(move) == 1:
+            t = coloca_peca(t,j,cria_posicao(move[0][0], move[0][1]))
+        if len(move) == 2:
+            t = move_peca(t, (cria_posicao(move[0][0], move[0][1])), (cria_posicao(move[1][0], move[1][1])))
+        print(tabuleiro_para_str(t))
+
+        ganhador = obter_ganhador(t)
+        if ganhador != 0:
+                return (peca_para_str(ganhador))
+
+        move = obter_movimento_auto(t,-j,dif)
+        if len(move) == 1:
+                t = coloca_peca(t,-j,cria_posicao(move[0][0], move[0][1]))
+        if len(move) == 2:
+                t = move_peca(t, (cria_posicao(move[0][0], move[0][1])), (cria_posicao(move[1][0], move[1][1])))
+        print("Turno do computador (" + dif + "):")
+        print(tabuleiro_para_str(t))
+
+        ganhador = obter_ganhador(t)
+        if ganhador != 0:
+            return (peca_para_str(ganhador))
