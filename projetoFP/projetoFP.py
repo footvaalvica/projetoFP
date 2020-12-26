@@ -48,7 +48,7 @@ def obter_posicoes_adjacentes(p):
     
     return posicoes[posicao_para_str(p)]
 
-#TAD peça 
+#TAD peca 
 # [1/0/-1]
 
 def cria_peca(j):
@@ -164,11 +164,11 @@ def eh_tabuleiro(t):
         sumTotal += abs(t[key])
         sumSmall += t[key]
         
-        #verifica se tem um máximo de 3 peças de cada jogador
+        #verifica se tem um maximo de 3 pecas de cada jogador
         #atraves da soma dos modulos dos valores
         if sumTotal > 6:
             return False
-        #verifica se um jogador tem mais peças que o outro
+        #verifica se um jogador tem mais pecas que o outro
         #atraves do modulo da soma dos valores
         if abs(sumSmall) > 1:
             return False
@@ -261,7 +261,8 @@ def obter_posicoes_jogador(t,j):
 def obter_movimento_manual(t,j):
     if len(obter_posicoes_livres(t)) > 3:
         pos = input('Turno do jogador. Escolha uma posicao: ')
-        if pos not in tuple(posicao_para_str(p) for p in obter_posicoes_livres(t)):
+        if pos not in tuple(posicao_para_str(p) for p in \
+        obter_posicoes_livres(t)):
             raise ValueError("obter_movimento_manual: escolha invalida")
         else:
             return (str_para_posicao(pos),)
@@ -269,7 +270,8 @@ def obter_movimento_manual(t,j):
         mov = input('Turno do jogador. Escolha um movimento: ')
         p1 = mov[:2]
         p2 = mov[2:]
-        if p2 not in tuple(posicao_para_str(p) for p in obter_posicoes_livres(t)) or t[p1] != j:
+        if p2 not in tuple(posicao_para_str(p) for p in \
+        obter_posicoes_livres(t)) or t[p1] != j:
             raise ValueError("obter_movimento_manual: escolha invalida")
         else:
             return (str_para_posicao(p1), str_para_posicao(p2))
@@ -313,7 +315,7 @@ def movimentoFacil(t,j):
                 return (cria_posicao(i[0],i[1]), cria_posicao(e[0],e[1]))
 
 def colocacao(t,j):
-    #VITÓRIA
+    #VITORIA
     result = vitoria(t,j)
     if result is not None:
         return vitoria(t,j)
@@ -415,7 +417,8 @@ def moinho(peca, dif):
             if len(move) == 1:
                 t = coloca_peca(t,j,cria_posicao(move[0][0], move[0][1]))
             if len(move) == 2:
-                t = move_peca(t, (cria_posicao(move[0][0], move[0][1])), (cria_posicao(move[1][0], move[1][1])))
+                t = move_peca(t, (cria_posicao(move[0][0], move[0][1])), 
+                (cria_posicao(move[1][0], move[1][1])))
             print(tabuleiro_para_str(t))
 
             ganhador = obter_ganhador(t)
@@ -426,7 +429,8 @@ def moinho(peca, dif):
             if len(move) == 1:
                     t = coloca_peca(t,-j,cria_posicao(move[0][0], move[0][1]))
             if len(move) == 2:
-                    t = move_peca(t, (cria_posicao(move[0][0], move[0][1])), (cria_posicao(move[1][0], move[1][1])))
+                    t = move_peca(t, (cria_posicao(move[0][0], move[0][1])), 
+                    (cria_posicao(move[1][0], move[1][1])))
             print("Turno do computador (" + dif + "):")
             print(tabuleiro_para_str(t))
 
@@ -439,7 +443,8 @@ def moinho(peca, dif):
             if len(move) == 1:
                     t = coloca_peca(t,-j,cria_posicao(move[0][0], move[0][1]))
             if len(move) == 2:
-                    t = move_peca(t, (cria_posicao(move[0][0], move[0][1])), (cria_posicao(move[1][0], move[1][1])))
+                    t = move_peca(t, (cria_posicao(move[0][0], move[0][1])), 
+                    (cria_posicao(move[1][0], move[1][1])))
             print("Turno do computador (" + dif + "):")
             print(tabuleiro_para_str(t))
 
@@ -451,7 +456,8 @@ def moinho(peca, dif):
             if len(move) == 1:
                 t = coloca_peca(t,j,cria_posicao(move[0][0], move[0][1]))
             if len(move) == 2:
-                t = move_peca(t, (cria_posicao(move[0][0], move[0][1])), (cria_posicao(move[1][0], move[1][1])))
+                t = move_peca(t, (cria_posicao(move[0][0], move[0][1])), 
+                (cria_posicao(move[1][0], move[1][1])))
             print(tabuleiro_para_str(t))
 
             ganhador = obter_ganhador(t)
