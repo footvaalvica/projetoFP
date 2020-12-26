@@ -254,7 +254,7 @@ def obter_posicoes_jogador(t,j):
     tuploPos = ()
     for i in t:
         if t[i] == peca_para_inteiro(j):
-            tuploPos += (i,)
+            tuploPos += ([i[0], i[1]],)
     
     return tuploPos
 
@@ -293,8 +293,8 @@ def obter_movimento_auto(t,j,s):
                 for i in choppedResult:
                     listPos.append(cria_posicao(i[0], i[1]))
                 return tuple(listPos)
+            return movimentoFacil(t,j)
 
-                return movimentoFacil(t,j)
     elif s == 'dificil':
         if len(obter_posicoes_livres(t)) > 3:          
             return colocacao(t,j)
@@ -385,13 +385,13 @@ def minimax(t,j,depth,*seq):
     if obter_ganhador(t) != 0 or depth == 0:
         return obter_ganhador(t), seq
     else:
-        bestResult = (-(obter_ganhador(t)))
+        bestResult = -obter_ganhador(t)
         melhorSeqMovimentos = ()
         for i in obter_posicoes_jogador(t,j):
             for e in obter_posicoes_adjacentes(i):
                 if e in obter_posicoes_livres(t):
                     novoTabuleiro = cria_copia_tabuleiro(t)
-                    novoMovimento = str(i), str(posicao_para_str(e))
+                    novoMovimento = str(posicao_para_str(i)), str(posicao_para_str(e))
                     novoTabuleiro = move_peca(novoTabuleiro, i, posicao_para_str(e))
                     novoResultado,novaSeqMovimentos = \
                     minimax(novoTabuleiro, -j, depth-1, *(seq+novoMovimento))
@@ -409,26 +409,51 @@ def moinho(peca, dif):
     ganhador = 0
     print("Bem-vindo ao JOGO DO MOINHO. Nivel de dificuldade " + dif + ".")
     print(tabuleiro_para_str(t))
-    while gameActive:
-        move = obter_movimento_manual(t,j)
-        if len(move) == 1:
-            t = coloca_peca(t,j,cria_posicao(move[0][0], move[0][1]))
-        if len(move) == 2:
-            t = move_peca(t, (cria_posicao(move[0][0], move[0][1])), (cria_posicao(move[1][0], move[1][1])))
-        print(tabuleiro_para_str(t))
+    if j == 1:
+        while gameActive:
+            move = obter_movimento_manual(t,j)
+            if len(move) == 1:
+                t = coloca_peca(t,j,cria_posicao(move[0][0], move[0][1]))
+            if len(move) == 2:
+                t = move_peca(t, (cria_posicao(move[0][0], move[0][1])), (cria_posicao(move[1][0], move[1][1])))
+            print(tabuleiro_para_str(t))
 
-        ganhador = obter_ganhador(t)
-        if ganhador != 0:
+            ganhador = obter_ganhador(t)
+            if ganhador != 0:
+                    return (peca_para_str(ganhador))
+
+            move = obter_movimento_auto(t,-j,dif)
+            if len(move) == 1:
+                    t = coloca_peca(t,-j,cria_posicao(move[0][0], move[0][1]))
+            if len(move) == 2:
+                    t = move_peca(t, (cria_posicao(move[0][0], move[0][1])), (cria_posicao(move[1][0], move[1][1])))
+            print("Turno do computador (" + dif + "):")
+            print(tabuleiro_para_str(t))
+
+            ganhador = obter_ganhador(t)
+            if ganhador != 0:
+                return (peca_para_str(ganhador))
+    if j == -1:
+        while gameActive:
+            move = obter_movimento_auto(t,-j,dif)
+            if len(move) == 1:
+                    t = coloca_peca(t,-j,cria_posicao(move[0][0], move[0][1]))
+            if len(move) == 2:
+                    t = move_peca(t, (cria_posicao(move[0][0], move[0][1])), (cria_posicao(move[1][0], move[1][1])))
+            print("Turno do computador (" + dif + "):")
+            print(tabuleiro_para_str(t))
+
+            ganhador = obter_ganhador(t)
+            if ganhador != 0:
                 return (peca_para_str(ganhador))
 
-        move = obter_movimento_auto(t,-j,dif)
-        if len(move) == 1:
-                t = coloca_peca(t,-j,cria_posicao(move[0][0], move[0][1]))
-        if len(move) == 2:
+            move = obter_movimento_manual(t,j)
+            if len(move) == 1:
+                t = coloca_peca(t,j,cria_posicao(move[0][0], move[0][1]))
+            if len(move) == 2:
                 t = move_peca(t, (cria_posicao(move[0][0], move[0][1])), (cria_posicao(move[1][0], move[1][1])))
-        print("Turno do computador (" + dif + "):")
-        print(tabuleiro_para_str(t))
+            print(tabuleiro_para_str(t))
 
-        ganhador = obter_ganhador(t)
-        if ganhador != 0:
-            return (peca_para_str(ganhador))
+            ganhador = obter_ganhador(t)
+            if ganhador != 0:
+                    return (peca_para_str(ganhador))            
