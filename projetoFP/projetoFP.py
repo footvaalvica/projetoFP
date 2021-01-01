@@ -196,8 +196,7 @@ def eh_tabuleiro(t):
     sumSmall = 0
     properList = ['a1', 'b1', 'c1', 'a2', 'b2', 'c2', 'a3', 'b3', 'c3']
 
-    if sorted(list(t), key=sortedHelper) != properList and (len(t) != 
-    len(properList)):
+    if sorted(list(t)) != sorted(properList) and len(t) != len(properList):
         return False
     
     if ver_2_ganhadores(t) == True:
@@ -207,7 +206,7 @@ def eh_tabuleiro(t):
         sumTotal += abs(t[key])
         sumSmall += t[key]
 
-        if (t[key] == 1 and t[key] == 0 and t[key] == -1) == False:
+        if type(key) != int:
             return False
 
         #verifica se tem um maximo de 3 pecas de cada jogador
@@ -217,6 +216,9 @@ def eh_tabuleiro(t):
         #verifica se um jogador tem mais pecas que o outro
         #atraves do modulo da soma dos valores
         if abs(sumSmall) > 1:
+            return False
+
+        if not -1 <= t[key] <= 1:
             return False
 
     return True
