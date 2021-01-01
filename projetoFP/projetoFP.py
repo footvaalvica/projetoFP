@@ -43,10 +43,6 @@ def str_para_posicao(s):
     return cria_posicao(s[:1], s[1:])
 
 ##############################################################################
-#                         FIM FUNCOES CRIADAS POR MIM                        #
-##############################################################################
-
-##############################################################################
 #                         FUNCOES ALTO NIVEL POSICAO                         #
 ##############################################################################
 
@@ -66,10 +62,6 @@ def obter_posicoes_adjacentes(p):
     }
     
     return posicoes[posicao_para_str(p)]
-
-##############################################################################
-#                        FIM FUNCOES ALTO NIVEL POSICAO                      #
-##############################################################################
 
 ##############################################################################
 #                                   TAD PECA                                 #
@@ -125,19 +117,11 @@ def inteiro_para_peca(j):
         return 'O'
 
 ##############################################################################
-#                         FIM FUNCOES CRIADAS POR MIM                        #
-##############################################################################
-
-##############################################################################
 #                            FUNCOES ALTO NIVEL PECA                         #
 ##############################################################################
 
 def peca_para_inteiro(j):
     return cria_peca(peca_para_str(j)[1:2])
-
-##############################################################################
-#                         FIM FUNCOES ALTO NIVEL PECA                        #
-##############################################################################
 
 ##############################################################################
 #                                TAD TABULEIRO                               #
@@ -304,10 +288,6 @@ def sortedHelper(obj):
     return i
 
 ##############################################################################
-#                         FIM FUNCOES CRIADAS POR MIM                        #
-##############################################################################
-
-##############################################################################
 #                       FUNCOES ALTO NIVEL TABULEIRO                         #
 ##############################################################################
 
@@ -333,10 +313,6 @@ def obter_posicoes_jogador(t,j):
             listTuploPos.append([i[0],i[1]])
 
     return tuple(sorted(listTuploPos, key=sortedHelper))
-
-##############################################################################
-#                      FIM FUNCOES ALTO NIVEL TABULEIRO                      #
-##############################################################################
 
 ##############################################################################
 #                                LOGICA DO JOGO                              #
@@ -478,6 +454,7 @@ def minimax(t,j,depth,*seq):
         return bestResult,melhorSeqMovimentos
 
 def moinho(peca, dif):
+    #AUXILIAR 1
     def part1(t,j):
         move = obter_movimento_manual(t,j)
         if move == "skip":
@@ -489,6 +466,8 @@ def moinho(peca, dif):
                 t = move_peca(t, (cria_posicao(move[0][0], move[0][1])), 
                     (cria_posicao(move[1][0], move[1][1])))
             print(tabuleiro_para_str(t))
+
+    #AUXILIAR 2
     def part2(t,j, dif):
         move = obter_movimento_auto(t,-j,dif)
         if len(move) == 1:
@@ -498,6 +477,7 @@ def moinho(peca, dif):
                 (cria_posicao(move[1][0], move[1][1])))
         print("Turno do computador (" + dif + "):")
         print(tabuleiro_para_str(t))
+    
     t = cria_tabuleiro()
     j = cria_peca(peca[1:2])
     gameActive = True
@@ -524,10 +504,6 @@ def moinho(peca, dif):
             ganhador = obter_ganhador(t)
             if ganhador != 0:
                     return (peca_para_str(ganhador))
-
-##############################################################################
-#                               FIM LOGICA DO JOGO                           #
-##############################################################################
 
 ##############################################################################
 #                                      FIM                                   #
