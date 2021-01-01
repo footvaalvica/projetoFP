@@ -1,17 +1,20 @@
-#TAD Posicao
-#Lista com [a,d]
+##############################################################################
+#                                     INICIO                                 #
+##############################################################################
+
+##############################################################################
+#                                  TAD POSICAO                               #
+##############################################################################
 
 def cria_posicao(c,l):
-    if type(c) == type(l) == str and 97 <= ord(c) <= 99 and 3 >= int(l) > 0:
+    if type(c) == type(l) == str and len(c) == len(l) == 1 and \
+    97 <= ord(c) <= 99 and 3 >= int(l) > 0:
         return [c,l]
     else:
         raise ValueError('cria_posicao: argumentos invalidos')
 
 def obter_pos_c(p):
     return p[0]
-
-def str_para_posicao(s):
-    return cria_posicao(s[:1], s[1:])
 
 def obter_pos_l(p):
     return p[1]
@@ -29,8 +32,24 @@ def posicoes_iguais(p1, p2):
 def posicao_para_str(p):
     return str(obter_pos_c(p) + obter_pos_l(p))
 
+def str_para_posicao(s):
+    return cria_posicao(s[:1], s[1:])
 
-#FUNCAO ALTO NIVEL
+##############################################################################
+#                           FUNCOES CRIADAS POR MIM                          #
+##############################################################################
+
+def str_para_posicao(s):
+    return cria_posicao(s[:1], s[1:])
+
+##############################################################################
+#                         FIM FUNCOES CRIADAS POR MIM                        #
+##############################################################################
+
+##############################################################################
+#                         FUNCOES ALTO NIVEL POSICAO                         #
+##############################################################################
+
 def obter_posicoes_adjacentes(p):
     posicoes = {
         'a1':(['b','1'], ['a', '2'], ['b','2']),
@@ -39,17 +58,22 @@ def obter_posicoes_adjacentes(p):
         'b1':(['a','1'], ['c', '1'], ['b','2']),
         'b2':(['a','1'], ['b', '1'], ['c', '1'],
               ['a','2'], ['c', '2'], ['a', '3'],
-              ['b','3'], ['c',' 3']),
+              ['b','3'], ['c', '3']),
         'b3':(['b','2'], ['a', '3'], ['c','3']),
         'c1':(['b','1'], ['b', '2'], ['c','2']),
-        'c2':(['b','2'], ['c', '1'], ['c','3']),
+        'c2':(['c','1'], ['b', '2'], ['c','3']),
         'c3':(['b','2'], ['c', '2'], ['b','3'])
     }
     
     return posicoes[posicao_para_str(p)]
 
-#TAD peca 
-# [1/0/-1]
+##############################################################################
+#                        FIM FUNCOES ALTO NIVEL POSICAO                      #
+##############################################################################
+
+##############################################################################
+#                                   TAD PECA                                 #
+##############################################################################
 
 def cria_peca(j):
     if j == 'X':
@@ -62,10 +86,20 @@ def cria_peca(j):
         raise ValueError('cria_peca: argumento invalido')
 
 def cria_copia_peca(j):
-    return j.copy()
+    return float(j)
 
 def eh_peca(j):
-    return type(j) == int and -1 <= j <= 1
+    if type(j) == float:
+        if j == 1:
+            return True
+        elif j == 0:
+            return True
+        elif j == -1:
+            return True
+        else:
+            return False
+    else:
+        return type(j) == int and -1 <= j <= 1
 
 def pecas_iguais(j1, j2):
     return j1 == j2 and eh_peca(j1) and eh_peca(j2)
@@ -78,24 +112,48 @@ def peca_para_str(j):
     if j == -1:
         return '[O]'
 
+##############################################################################
+#                           FUNCOES CRIADAS POR MIM                          #
+##############################################################################
+
+def inteiro_para_peca(j):
+    if j == 1:
+        return 'X'
+    elif j == 0:
+        return ' '
+    elif j == -1:
+        return 'O'
+
+##############################################################################
+#                         FIM FUNCOES CRIADAS POR MIM                        #
+##############################################################################
+
+##############################################################################
+#                            FUNCOES ALTO NIVEL PECA                         #
+##############################################################################
+
 def peca_para_inteiro(j):
     return cria_peca(peca_para_str(j)[1:2])
 
-#TAD Tabuleiro
+##############################################################################
+#                         FIM FUNCOES ALTO NIVEL PECA                        #
+##############################################################################
 
+##############################################################################
+#                                TAD TABULEIRO                               #
+##############################################################################
 def cria_tabuleiro():
     tabuleiro = {
-        'a1':0, 
-        'b1':0, 
-        'c1':0,
-        'a2':0, 
-        'b2':0, 
-        'c2':0,
-        'a3':0, 
-        'b3':0, 
-        'c3':0
+        'a1':cria_peca(' '), 
+        'b1':cria_peca(' '), 
+        'c1':cria_peca(' '),
+        'a2':cria_peca(' '), 
+        'b2':cria_peca(' '), 
+        'c2':cria_peca(' '),
+        'a3':cria_peca(' '), 
+        'b3':cria_peca(' '), 
+        'c3':cria_peca(' ')
     }
-
     return tabuleiro
 
 def cria_copia_tabuleiro(t):
@@ -119,34 +177,18 @@ def obter_vetor(t, s):
     elif s == '3':
         return (t['a3'], t['b3'], t['c3'])
 
-#soma todos os valores de um vetor
-def soma_pecas_em_linha(t,s):
-    soma = 0
-    soma = sum(obter_vetor(t,s))
-    return soma
-
-#soma todos os valores de todas as linhas e colunas
-def todas_soma_pecas_em_linha(t):
-    listaTodas = ['a', 'b', 'c', '1', '2', '3']
-    listaNova = []
-    for i in listaTodas:
-        listaNova.append(soma_pecas_em_linha(t,i))
-    return listaNova
-
 def coloca_peca(t,j,p):
     t[posicao_para_str(p)] = peca_para_inteiro(j)
     return t
 
 def remove_peca(t, p):
-    t[posicao_para_str(p)] = ' '
+    t[posicao_para_str(p)] = cria_peca(' ')
     return t
 
-def mais_que_um_vencedor(t):
-    lista = todas_soma_pecas_em_linha(t)
-
 def move_peca(t, p1, p2):
-    t[posicao_para_str(p2)] = obter_peca(t, p1)
-    t[posicao_para_str(p1)] = 0
+    tempPeca = obter_peca(t, p1)
+    t[posicao_para_str(p1)] = cria_peca(' ')
+    t[posicao_para_str(p2)] = tempPeca
     return t
 
 def eh_tabuleiro(t):
@@ -154,16 +196,20 @@ def eh_tabuleiro(t):
     sumSmall = 0
     properList = ['a1', 'b1', 'c1', 'a2', 'b2', 'c2', 'a3', 'b3', 'c3']
 
-    if sorted(list(t)) != sorted(properList):
+    if sorted(list(t), key=sortedHelper) != properList and (len(t) != 
+    len(properList)):
         return False
     
-    if obter_ganhador(t) == False:
+    if ver_2_ganhadores(t) == True:
         return False
 
     for key in t:  
         sumTotal += abs(t[key])
         sumSmall += t[key]
-        
+
+        if (t[key] == 1 and t[key] == 0 and t[key] == -1) == False:
+            return False
+
         #verifica se tem um maximo de 3 pecas de cada jogador
         #atraves da soma dos modulos dos valores
         if sumTotal > 6:
@@ -173,19 +219,14 @@ def eh_tabuleiro(t):
         if abs(sumSmall) > 1:
             return False
 
-        if not -1 <= t[key] <= 1:
-            return False
-
     return True
     
 def eh_posicao_livre(t,p):
-    return obter_peca(t,p) == 0
+    return obter_peca(t,p) == cria_peca(' ')
 
-#def tabuleiros_iguais
 def tabuleiros_iguais(t1, t2):
     return t1 == t2
-    
-#def tabuleiro_para_str
+
 def tabuleiro_para_str(t):
     stringTab = """   a   b   c
 1 --
@@ -200,25 +241,41 @@ def tabuleiro_para_str(t):
     peca_para_str(t['b2']) + stringTab[34:35] + peca_para_str(t['c2']) + \
     stringTab[35:51] + peca_para_str(t['a3']) + stringTab[51:52] + \
     peca_para_str(t['b3']) + stringTab[52:53] + peca_para_str(t['c3'])
-    
-#def tuplo_para_tabuleiro
 
 def tuplo_para_tabuleiro(t):
     tabuleiro = cria_tabuleiro()
-    tabuleiro['a1'] = t[0][0]
-    tabuleiro['b1'] = t[0][1]
-    tabuleiro['c1'] = t[0][2]
-    tabuleiro['a2'] = t[1][0]
-    tabuleiro['b2'] = t[1][1]
-    tabuleiro['c2'] = t[1][2]
-    tabuleiro['a3'] = t[2][0]
-    tabuleiro['b3'] = t[2][1]
-    tabuleiro['c3'] = t[2][2]
+    tabuleiro['a1'] = cria_peca(inteiro_para_peca(t[0][0]))
+    tabuleiro['b1'] = cria_peca(inteiro_para_peca(t[0][1]))
+    tabuleiro['c1'] = cria_peca(inteiro_para_peca(t[0][2]))
+    tabuleiro['a2'] = cria_peca(inteiro_para_peca(t[1][0]))
+    tabuleiro['b2'] = cria_peca(inteiro_para_peca(t[1][1]))
+    tabuleiro['c2'] = cria_peca(inteiro_para_peca(t[1][2]))
+    tabuleiro['a3'] = cria_peca(inteiro_para_peca(t[2][0]))
+    tabuleiro['b3'] = cria_peca(inteiro_para_peca(t[2][1]))
+    tabuleiro['c3'] = cria_peca(inteiro_para_peca(t[2][2]))
     return tabuleiro
 
+##############################################################################
+#                           FUNCOES CRIADAS POR MIM                          #
+##############################################################################
 
-#FUNCAO ALTO NIVEL
-def obter_ganhador(t): 
+#soma todos os valores de um vetor
+#nao respeita abstracao
+def soma_pecas_em_linha(t,s):
+    soma = 0
+    soma = sum(obter_vetor(t,s))
+    return soma
+
+#soma todos os valores de todas as linhas e colunas
+#nao respeita abstracao
+def todas_soma_pecas_em_linha(t):
+    listaTodas = ['a', 'b', 'c', '1', '2', '3']
+    listaNova = []
+    for i in listaTodas:
+        listaNova.append(soma_pecas_em_linha(t,i))
+    return listaNova
+
+def ver_2_ganhadores(t):
     lista = todas_soma_pecas_em_linha(t)
     nump3 = 0
     numn3 = 0
@@ -229,9 +286,31 @@ def obter_ganhador(t):
     if -3 in lista:
         numn3 += 1
 
-    #Devolve falso se houver 2 ganhadores
+    #Devolve verdadeiro se houver 2 ganhadores
     if numn3 == nump3 and numn3 != 0:
-        return False
+        return True
+
+def sortedHelper(obj):
+    helpfulTuple = (['a', '1'], ['b', '1'], ['c', '1'], 
+    ['a', '2'], ['b', '2'], ['c', '2'], 
+    ['a', '3'], ['b', '3'], ['c', '3'])
+    i = 0
+
+    while helpfulTuple[i] != obj:
+        i += 1
+
+    return i
+
+##############################################################################
+#                         FIM FUNCOES CRIADAS POR MIM                        #
+##############################################################################
+
+##############################################################################
+#                       FUNCOES ALTO NIVEL TABULEIRO                         #
+##############################################################################
+
+def obter_ganhador(t): 
+    lista = todas_soma_pecas_em_linha(t)
 
     if 3 in lista:
         return cria_peca('X')
@@ -240,23 +319,26 @@ def obter_ganhador(t):
     else:
         return cria_peca(' ')
 
-#FUNCAO ALTO NIVEL MAS NAO RESPEITA ABSTRACAO
 def obter_posicoes_livres(t):
+    return obter_posicoes_jogador(t, cria_peca(' '))
+
+#FUNCAO ALTO NIVEL MAS NAO RESPEITA ABSTRACAO
+#TBM NAO DA O OUTPUT POR ORDEM
+def obter_posicoes_jogador(t,j):
     listTuploPos = []
     for i in t:
-        if t[i] == 0:
+        if t[i] == peca_para_inteiro(j):
             listTuploPos.append([i[0],i[1]])
 
-    return tuple(listTuploPos)
+    return tuple(sorted(listTuploPos, key=sortedHelper))
 
-#FUNCAO ALTO NIVEL MAS NAO RESPEITA ABSTRACAO
-def obter_posicoes_jogador(t,j):
-    tuploPos = ()
-    for i in t:
-        if t[i] == peca_para_inteiro(j):
-            tuploPos += ([i[0], i[1]],)
-    
-    return tuploPos
+##############################################################################
+#                      FIM FUNCOES ALTO NIVEL TABULEIRO                      #
+##############################################################################
+
+##############################################################################
+#                                LOGICA DO JOGO                              #
+##############################################################################
 
 def obter_movimento_manual(t,j):
     if len(obter_posicoes_livres(t)) > 3:
@@ -270,11 +352,14 @@ def obter_movimento_manual(t,j):
         mov = input('Turno do jogador. Escolha um movimento: ')
         p1 = mov[:2]
         p2 = mov[2:]
-        if p2 not in tuple(posicao_para_str(p) for p in \
-        obter_posicoes_livres(t)) or t[p1] != j:
-            raise ValueError("obter_movimento_manual: escolha invalida")
+        if p1 == p2:
+            return "skip"
         else:
-            return (str_para_posicao(p1), str_para_posicao(p2))
+            if (p2 not in tuple(posicao_para_str(p) for p 
+            in obter_posicoes_livres(t)) or t[p1] != j):
+                raise ValueError("obter_movimento_manual: escolha invalida")
+            else:
+                return (str_para_posicao(p1), str_para_posicao(p2))
 
 def obter_movimento_auto(t,j,s):
     #devolve tuplo
@@ -295,7 +380,8 @@ def obter_movimento_auto(t,j,s):
                 for i in choppedResult:
                     listPos.append(cria_posicao(i[0], i[1]))
                 return tuple(listPos)
-            return movimentoFacil(t,j)
+            else:
+                return movimentoFacil(t,j)
 
     elif s == 'dificil':
         if len(obter_posicoes_livres(t)) > 3:          
@@ -346,43 +432,25 @@ def colocacao(t,j):
         return (cria_posicao('b', '3'),)
 
 def vitoria(t,j):
-    vetorListaA = list(obter_vetor(t,'a'))
-    vetorListaACopy = vetorListaA.copy()
-    if 0 in vetorListaA:
-        vetorListaACopy.pop(vetorListaACopy.index(0))
-    if 0 in vetorListaA and vetorListaACopy[0] == vetorListaACopy[1] == j:
-        return (cria_posicao('a',(str(obter_vetor(t,'a').index(0)+1))),)
-    vetorListaB = list(obter_vetor(t,'b'))
-    vetorListaBCopy = vetorListaB.copy()
-    if 0 in vetorListaB:
-        vetorListaBCopy.pop(vetorListaBCopy.index(0))
-    if 0 in vetorListaB and vetorListaBCopy[0] == vetorListaBCopy[1] == j:
-        return (cria_posicao('b',(str(obter_vetor(t,'b').index(0)+1))),)
-    vetorListaC = list(obter_vetor(t,'c'))
-    vetorListaCCopy = vetorListaC.copy()
-    if 0 in vetorListaC:
-        vetorListaCCopy.pop(vetorListaCCopy.index(0))
-    if 0 in vetorListaC and vetorListaCCopy[0] == vetorListaCCopy[1] == j:
-        return (cria_posicao('c',(str(obter_vetor(t,'c').index(0)+1))),)
-    vetorLista1 = list(obter_vetor(t,'1'))
-    vetorLista1Copy = vetorLista1.copy()
-    if 0 in vetorLista1:
-        vetorLista1Copy.pop(vetorLista1Copy.index(0))
-    if 0 in vetorLista1 and vetorLista1Copy[0] == vetorLista1Copy[1] == j:
-        return (cria_posicao(chr(((obter_vetor(t,'1').index(0)+97))),'1'),)
-    vetorLista2 = list(obter_vetor(t,'2'))
-    vetorLista2Copy = vetorLista2.copy()
-    if 0 in vetorLista2:
-        vetorLista2Copy.pop(vetorLista2Copy.index(0))
-    if 0 in vetorLista2 and vetorLista2Copy[0] == vetorLista2Copy[1] == j:
-        return (cria_posicao(chr(((obter_vetor(t,'2').index(0)+97))),'2'),)
-    vetorLista3 = list(obter_vetor(t,'3'))
-    vetorLista3Copy = vetorLista3.copy()
-    if 0 in vetorLista3:
-        vetorLista3Copy.pop(vetorLista3Copy.index(0))
-    if 0 in vetorLista3 and vetorLista3Copy[0] == vetorLista3Copy[1] == j:
-        return (cria_posicao(chr(((obter_vetor(t,'3').index(0)+97))),'3'),)
+    LettersList = ['a', 'b', 'c']
+    numbersList = ['1', '2', '3']
 
+    for i in LettersList:
+        vetorLista = list(obter_vetor(t,i))
+        vetorListaCopy = vetorLista.copy()
+        if 0 in vetorLista:
+            vetorListaCopy.pop(vetorListaCopy.index(0))
+        if 0 in vetorLista and vetorListaCopy[0] == vetorListaCopy[1] == j:
+            return (cria_posicao(i,(str(obter_vetor(t,i).index(0)+1))),)
+
+    for i in numbersList:
+        vetorLista = list(obter_vetor(t,i))
+        vetorListaCopy = vetorLista.copy()
+        if 0 in vetorLista:
+            vetorListaCopy.pop(vetorListaCopy.index(0))
+        if 0 in vetorLista and vetorListaCopy[0] == vetorListaCopy[1] == j:
+            return (cria_posicao(chr(((obter_vetor(t,i).index(0)+97))),i),)
+    
 def minimax(t,j,depth,*seq):
     if obter_ganhador(t) != 0 or depth == 0:
         return obter_ganhador(t), seq
@@ -393,18 +461,41 @@ def minimax(t,j,depth,*seq):
             for e in obter_posicoes_adjacentes(i):
                 if e in obter_posicoes_livres(t):
                     novoTabuleiro = cria_copia_tabuleiro(t)
-                    novoMovimento = str(posicao_para_str(i)), str(posicao_para_str(e))
-                    novoTabuleiro = move_peca(novoTabuleiro, i, posicao_para_str(e))
+                    novoMovimento = str(posicao_para_str(i)), \
+                    str(posicao_para_str(e))
+                    novoTabuleiro = move_peca(novoTabuleiro, 
+                    posicao_para_str(i), 
+                    posicao_para_str(e))
                     novoResultado,novaSeqMovimentos = \
                     minimax(novoTabuleiro, -j, depth-1, *(seq+novoMovimento))
                     if melhorSeqMovimentos == () \
-                    or (j == 1 and novoResultado > bestResult) \
-                    or (j == -1 and novoResultado < bestResult):
+                    or (j == cria_peca('X') and novoResultado > bestResult) \
+                    or (j == cria_peca('O') and novoResultado < bestResult):
                         bestResult, melhorSeqMovimentos = \
                         novoResultado,novaSeqMovimentos
         return bestResult,melhorSeqMovimentos
 
 def moinho(peca, dif):
+    def part1(t,j):
+        move = obter_movimento_manual(t,j)
+        if move == "skip":
+            pass
+        else:
+            if len(move) == 1:
+                t = coloca_peca(t,j,cria_posicao(move[0][0], move[0][1]))
+            if len(move) == 2:
+                t = move_peca(t, (cria_posicao(move[0][0], move[0][1])), 
+                    (cria_posicao(move[1][0], move[1][1])))
+            print(tabuleiro_para_str(t))
+    def part2(t,j, dif):
+        move = obter_movimento_auto(t,-j,dif)
+        if len(move) == 1:
+                t = coloca_peca(t,-j,cria_posicao(move[0][0], move[0][1]))
+        if len(move) == 2:
+                t = move_peca(t, (cria_posicao(move[0][0], move[0][1])), 
+                (cria_posicao(move[1][0], move[1][1])))
+        print("Turno do computador (" + dif + "):")
+        print(tabuleiro_para_str(t))
     t = cria_tabuleiro()
     j = cria_peca(peca[1:2])
     gameActive = True
@@ -413,53 +504,29 @@ def moinho(peca, dif):
     print(tabuleiro_para_str(t))
     if j == 1:
         while gameActive:
-            move = obter_movimento_manual(t,j)
-            if len(move) == 1:
-                t = coloca_peca(t,j,cria_posicao(move[0][0], move[0][1]))
-            if len(move) == 2:
-                t = move_peca(t, (cria_posicao(move[0][0], move[0][1])), 
-                (cria_posicao(move[1][0], move[1][1])))
-            print(tabuleiro_para_str(t))
-
+            part1(t,j)
             ganhador = obter_ganhador(t)
             if ganhador != 0:
                     return (peca_para_str(ganhador))
-
-            move = obter_movimento_auto(t,-j,dif)
-            if len(move) == 1:
-                    t = coloca_peca(t,-j,cria_posicao(move[0][0], move[0][1]))
-            if len(move) == 2:
-                    t = move_peca(t, (cria_posicao(move[0][0], move[0][1])), 
-                    (cria_posicao(move[1][0], move[1][1])))
-            print("Turno do computador (" + dif + "):")
-            print(tabuleiro_para_str(t))
-
+            part2(t,j,dif)
             ganhador = obter_ganhador(t)
             if ganhador != 0:
                 return (peca_para_str(ganhador))
     if j == -1:
         while gameActive:
-            move = obter_movimento_auto(t,-j,dif)
-            if len(move) == 1:
-                    t = coloca_peca(t,-j,cria_posicao(move[0][0], move[0][1]))
-            if len(move) == 2:
-                    t = move_peca(t, (cria_posicao(move[0][0], move[0][1])), 
-                    (cria_posicao(move[1][0], move[1][1])))
-            print("Turno do computador (" + dif + "):")
-            print(tabuleiro_para_str(t))
-
+            part2(t,j,dif)
             ganhador = obter_ganhador(t)
             if ganhador != 0:
                 return (peca_para_str(ganhador))
-
-            move = obter_movimento_manual(t,j)
-            if len(move) == 1:
-                t = coloca_peca(t,j,cria_posicao(move[0][0], move[0][1]))
-            if len(move) == 2:
-                t = move_peca(t, (cria_posicao(move[0][0], move[0][1])), 
-                (cria_posicao(move[1][0], move[1][1])))
-            print(tabuleiro_para_str(t))
-
+            part1(t,j)
             ganhador = obter_ganhador(t)
             if ganhador != 0:
-                    return (peca_para_str(ganhador))            
+                    return (peca_para_str(ganhador))
+
+##############################################################################
+#                               FIM LOGICA DO JOGO                           #
+##############################################################################
+
+##############################################################################
+#                                      FIM                                   #
+##############################################################################            
