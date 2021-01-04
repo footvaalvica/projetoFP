@@ -92,7 +92,7 @@ def str_para_posicao(s):
     """ 
     str_para_posicao: str -> posicao
     
-    devolve a posicao que corresponde à string 'cl'
+    devolve a posicao que corresponde a string 'cl'
     """
     return cria_posicao(s[:1], s[1:])
 
@@ -190,7 +190,7 @@ def peca_para_str(j):
     pecas_para_str: peca -> str
 
     devolve a cadeia de carateres que representa o jogador
-    dono da peca, isto é, '[X]', '[O]' ou '[ ]'
+    dono da peca, isto e, '[X]', '[O]' ou '[ ]'
     """
     if j == 1:
         return '[X]'
@@ -412,7 +412,6 @@ def obter_posicoes_livres(t):
     return obter_posicoes_jogador(t, cria_peca(' '))
 
 #FUNCAO ALTO NIVEL MAS NAO RESPEITA ABSTRACAO
-#TBM NAO DA O OUTPUT POR ORDEM
 def obter_posicoes_jogador(t,j):
     listTuploPos = []
     for i in t:
