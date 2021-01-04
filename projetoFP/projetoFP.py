@@ -7,8 +7,6 @@
 ##############################################################################
 #                                  TAD POSICAO                               #
 ##############################################################################
-
-#TAD posicao
 #Representacao interna: lista de dois elementos ([coluna, linha])
 # cria_posicao: str x str -> posicao
 # cria_posicao: posicao -> posicao
@@ -126,15 +124,12 @@ def obter_posicoes_adjacentes(p):
 ##############################################################################
 #                                   TAD PECA                                 #
 ##############################################################################
-
-#TAD peca
 #Representacao da peca: 1 ou 0 ou -1 ou 1.0 ou 0.0 ou -1.0
 # cria_peca: str -> peca
 # cria_copia_peca: peca -> peca
 # eh_peca: universal -> booleano
 # pecas_iguais: peca x peca -> booleano
 # peca_para_str: peca -> str
-# peca_para_inteiro: peca -> N
 
 def cria_peca(j):
     """
@@ -168,12 +163,15 @@ def eh_peca(j):
     devolve True caso o seu argumento seja um TAD peca e False
     caso contrario
     """
-    if j == 1:
-        return True
-    elif j == 0:
-        return True
-    elif j == -1:
-        return True
+    if type(j) != bool:
+        if j == 1:
+            return True
+        elif j == 0:
+            return True
+        elif j == -1:
+            return True
+        else:
+            return False
     else:
         return False
 
@@ -232,8 +230,26 @@ def peca_para_inteiro(j):
 ##############################################################################
 #                                TAD TABULEIRO                               #
 ##############################################################################
+#Representacao do tabuleiro: dicionario de pecas
+# cria_peca: () -> tabuleiro
+# cria_copia_peca: tabuleiro -> tabuleiro
+# obter_peca: tabuleiro x posicao -> peca
+# obter_vetor: tabuleiro x str -> tuplo de pecas
+# coloca_peca: tabuleiro x peca x posicao -> tabuleiro
+# remove_peca: tabuleiro x posicao -> tabuleiro
+# move_peca: tabuleiro x posicao x posicao -> tabuleiro
+# eh_tabuleiro: universal -> booleano
+# tabuleiros_iguais: tabuleiro x tabuleiro -> booleano
+# tabuleiro_para_str: tabuleiro -> str
+# tuplo_para_tabuleiro: tuplo -> tabuleiro
 
 def cria_tabuleiro():
+    """
+    cria_tabuleiro: {} -> tabuleiro
+
+    devolve um tabuleiro de jogo do moinho de 3x3 sem
+    posicoes ocupadas por pecas do jogador
+    """
     tabuleiro = {
         'a1':cria_peca(' '), 
         'b1':cria_peca(' '), 
@@ -248,13 +264,30 @@ def cria_tabuleiro():
     return tabuleiro
 
 def cria_copia_tabuleiro(t):
+    """
+    cria_copia_tabuleiro: tabuleiro -> tabuleiro
+
+    recebe um tabuleiro e devolve uma copia nova do tabuleiro
+    """
     t1 = t.copy()
     return t1
 
 def obter_peca(t, p):
+    """
+    obter_peca: tabuleiro x posicao -> peca
+
+    devolve a peça na posicao p do tabuleiro. Se a posicao
+    estiver ocupada, devolve uma peça livre.
+    """
     return t[posicao_para_str(p)]
 
 def obter_vetor(t, s):
+    """
+    obter_vetor: tabuleiro x str -> tuplo de pecas
+
+    devolve todas as pecas da linha ou coluna especificada pelo
+    seu argumento
+    """
     if s == 'a':
         return (t['a1'], t['a2'], t['a3'])
     elif s == 'b':
@@ -269,20 +302,45 @@ def obter_vetor(t, s):
         return (t['a3'], t['b3'], t['c3'])
 
 def coloca_peca(t,j,p):
+    """
+    coloca_peca: tabuleiro x peca x posicao -> tabuleiro
+
+    modifica destrutivamente o tabuleiro t colocando a peça
+    j na posicao p, e devolve o proprio tabuleiro
+    """
     t[posicao_para_str(p)] = peca_para_inteiro(j)
     return t
 
 def remove_peca(t, p):
+    """
+    remove_peca: tabuleiro x posicao -> tabuleiro
+
+    modifica destrutivamente o tabuleiro t removendo a peca
+    da posicao p, e devolve o proprio tabuleiro
+    """
     t[posicao_para_str(p)] = cria_peca(' ')
     return t
 
 def move_peca(t, p1, p2):
+    """
+    move_peca: tabuleiro x posicao x posicao -> tabuleiro
+
+    modifica destrutivamente o tabuleiro t movendo a peca
+    que se encontra na posicao p1 para a posicao p2, e devolve
+    o proprio tabuleiro
+    """
     tempPeca = obter_peca(t, p1)
     t[posicao_para_str(p1)] = cria_peca(' ')
     t[posicao_para_str(p2)] = tempPeca
     return t
 
 def eh_tabuleiro(t):
+    """
+    eh_tabuleiro: universal -> booleano
+
+    devolve True caso o seu argumento seja um TAD tabuleiro e False
+    caso contrario
+    """
     sumTotal = 0
     sumSmall = 0
     properList = ['a1', 'b1', 'c1', 'a2', 'b2', 'c2', 'a3', 'b3', 'c3']
@@ -315,12 +373,28 @@ def eh_tabuleiro(t):
     return True
     
 def eh_posicao_livre(t,p):
+    """
+    eh_posicao_livre: tabuleiro x posicao -> booleano
+
+    devolve True apenas no caso da posicao p do tabuleiro
+    corresponder a uma posicao livre
+    """
     return obter_peca(t,p) == cria_peca(' ')
 
 def tabuleiros_iguais(t1, t2):
+    """
+    tabuleiros_iguais: tabuleiro x tabuleiro -> booleano
+    
+    devolve True apenas se t1 e t2 sao tabuleiros e sao iguais
+    """
     return t1 == t2
 
 def tabuleiro_para_str(t):
+    """
+    tabuleiro_para_str: tabuleiro -> str
+
+    devolve a cadeira de caracteres que representa o tabuleiro
+    """
     stringTab = """   a   b   c
 1 --
    | \ | / |
@@ -336,6 +410,12 @@ def tabuleiro_para_str(t):
     peca_para_str(t['b3']) + stringTab[52:53] + peca_para_str(t['c3'])
 
 def tuplo_para_tabuleiro(t):
+    """
+    tuplo_para_tabuleiro: tuplo -> tabuleiro
+
+    devolve o tabuleiro que e representado pelo tuplo t com 3 tuplos
+    cada um deles contendo 3 valores inteiros iguais a 1, -1 ou 0
+    """
     tabuleiro = cria_tabuleiro()
     tabuleiro['a1'] = cria_peca(inteiro_para_peca(t[0][0]))
     tabuleiro['b1'] = cria_peca(inteiro_para_peca(t[0][1]))
@@ -355,6 +435,12 @@ def tuplo_para_tabuleiro(t):
 #soma todos os valores de um vetor
 #nao respeita abstracao
 def soma_pecas_em_linha(t,s):
+    """
+    soma_pecas_em_linha: tabuleiro x str -> int
+
+    devolve o valor da soma das peças do vetor, por exemplo
+    (1, 0, 1) devolve 2
+    """
     soma = 0
     soma = sum(obter_vetor(t,s))
     return soma
@@ -362,6 +448,11 @@ def soma_pecas_em_linha(t,s):
 #soma todos os valores de todas as linhas e colunas
 #nao respeita abstracao
 def todas_soma_pecas_em_linha(t):
+    """
+    todas_soma_pecas_em_linha: tabuleiro -> int
+
+    devolve a soma de todas as linhas e colunas
+    """
     listaTodas = ['a', 'b', 'c', '1', '2', '3']
     listaNova = []
     for i in listaTodas:
@@ -369,6 +460,11 @@ def todas_soma_pecas_em_linha(t):
     return listaNova
 
 def ver_2_ganhadores(t):
+    """
+    ver_2_ganhadores: tabuleiro -> bool
+
+    devolve True caso haja 2 ganhadores, e falso caso contrario
+    """
     lista = todas_soma_pecas_em_linha(t)
     nump3 = 0
     numn3 = 0
@@ -384,6 +480,12 @@ def ver_2_ganhadores(t):
         return True
 
 def sortedHelper(obj):
+    """
+    sortedHelper: obj -> int
+
+    ajuda a dar sort do output de certas funcoes que
+    normalmente nao o dariam por ordem
+    """
     helpfulTuple = (['a', '1'], ['b', '1'], ['c', '1'], 
     ['a', '2'], ['b', '2'], ['c', '2'], 
     ['a', '3'], ['b', '3'], ['c', '3'])
@@ -399,6 +501,13 @@ def sortedHelper(obj):
 ##############################################################################
 
 def obter_ganhador(t): 
+    """
+    obter_ganhador: tabuleiro -> peca
+
+    devolve uma peca do jogador que tenha as suas 3 pecas em linha na vertical
+    ou na horizontal no tabuleiro. Se nao existir nenhum ganhador, devolve
+    uma peca livre
+    """
     lista = todas_soma_pecas_em_linha(t)
 
     if 3 in lista:
@@ -409,10 +518,22 @@ def obter_ganhador(t):
         return cria_peca(' ')
 
 def obter_posicoes_livres(t):
+    """
+    obter_posicoes_livres: tabuleiro -> tuplo de posicoes
+
+    devolve um tuplo com as posicoes nao ocupadas pelas pecas
+    de qualquer um dos dois jogadores na ordem de leitura do tabuleiro
+    """
     return obter_posicoes_jogador(t, cria_peca(' '))
 
 #FUNCAO ALTO NIVEL MAS NAO RESPEITA ABSTRACAO
 def obter_posicoes_jogador(t,j):
+    """
+    obter_posicoes_jogador: tabuleiro x peca -> tuplo de posicoes
+
+    devolve um tuplo com as posicoes ocupadas pelas pecas
+    j de um dos dois jogadores na ordem de leitura do tabuleiro
+    """
     listTuploPos = []
     for i in t:
         if t[i] == peca_para_inteiro(j):
@@ -425,6 +546,12 @@ def obter_posicoes_jogador(t,j):
 ##############################################################################
 
 def obter_movimento_manual(t,j):
+    """
+    obter_movimento_manual: tabuleiro x peca -> tuplo de posicoes
+
+    devolve um tuplo com uma ou duas posicoes que representam uma posicao
+    ou um movimento introduzido manualmente pelo jogador
+    """
     if len(obter_posicoes_livres(t)) > 3:
         pos = input('Turno do jogador. Escolha uma posicao: ')
         if pos not in tuple(posicao_para_str(p) for p in \
@@ -446,7 +573,12 @@ def obter_movimento_manual(t,j):
                 return (str_para_posicao(p1), str_para_posicao(p2))
 
 def obter_movimento_auto(t,j,s):
-    #devolve tuplo
+    """
+    obter_movimento_auto: tabuleiro x peca x str -> tuplo de posicoes
+
+    devolve um tuplo com uma ou duas posicoes que representam uma posicao
+    ou um movimento escolhido automaticamente
+    """
     if s == 'facil':
         if len(obter_posicoes_livres(t)) > 3:          
             return colocacao(t,j)
@@ -479,12 +611,24 @@ def obter_movimento_auto(t,j,s):
             return tuple(listPos)
 
 def movimentoFacil(t,j):
+    """
+    movimentoFacil: tabuleiro x peca -> tuplo de posicoes
+
+    devolve um tuplo com 2 posicoes que corresponde a fase de movimento 
+    facil
+    """
     for i in obter_posicoes_jogador(t,j):
         for e in obter_posicoes_adjacentes(i):
             if e in obter_posicoes_livres(t):
                 return (cria_posicao(i[0],i[1]), cria_posicao(e[0],e[1]))
 
 def colocacao(t,j):
+    """
+    colocao: tabuleiro x peca -> tuplo de posicoes
+
+    devolve um tuplo com uma posicao que corresponde ao movimento
+    certo a fazer na fase de colocacao
+    """
     #VITORIA
     result = vitoria(t,j)
     if result is not None:
@@ -516,6 +660,12 @@ def colocacao(t,j):
         return (cria_posicao('b', '3'),)
 
 def vitoria(t,j):
+    """
+    vitoria: tabuleiro x peca -> tuplo de posicoes
+
+    devolve um tuplo com a posicao que e preciso marcar
+    para ganhar o jogo durante a fase de colocacao
+    """
     LettersList = ['a', 'b', 'c']
     numbersList = ['1', '2', '3']
 
@@ -536,6 +686,16 @@ def vitoria(t,j):
             return (cria_posicao(chr(((obter_vetor(t,i).index(0)+97))),i),)
     
 def minimax(t,j,depth,*seq):
+    """
+    minimax: tabuleiro x jogador x int x tuplo de posicoes -> 
+    int, tuplo de posicoes
+
+    funcao que lida com a logica de movimento calculando estados de jogo a
+    frente do atual e vendo qual e o que leva a vitoria
+
+    devolve um inteiro com o estado do tabuleiro e a sequencia de movimentos
+    a ser jogada
+    """
     if obter_ganhador(t) != 0 or depth == 0:
         return obter_ganhador(t), seq
     else:
@@ -560,6 +720,12 @@ def minimax(t,j,depth,*seq):
         return bestResult,melhorSeqMovimentos
 
 def moinho(peca, dif):
+    """
+    moinho: str x str -> peca
+
+    funcao que permite jogar o jogo
+    Devolve a representacao externa da peca ganhadora
+    """
     #AUXILIAR 1
     def part1(t,j):
         move = obter_movimento_manual(t,j)
