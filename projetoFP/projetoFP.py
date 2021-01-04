@@ -1,3 +1,5 @@
+#Mateus Leite Pinho ist199282
+
 ##############################################################################
 #                                     INICIO                                 #
 ##############################################################################
@@ -6,7 +8,24 @@
 #                                  TAD POSICAO                               #
 ##############################################################################
 
+#TAD posicao
+#Representacao interna: lista de dois elementos ([coluna, linha])
+# cria_posicao: str x str -> posicao
+# cria_posicao: posicao -> posicao
+# eh_posicao: universal -> booleano
+# obter_pos_c: posicao -> str
+# obter_pos_l: posicao -> str
+# posicoes_iguais: posicao x posicao -> str
+# posicao_para_str: posicao -> str
+
 def cria_posicao(c,l):
+    """
+    cria_posicao: str x str -> posicao
+
+    recebe duas cadeias de carateres correspondentes a coluna c e a 
+    linha l de uma posicao e devolve a posic ao correspondente
+    """
+    
     if type(c) == type(l) == str and len(c) == len(l) == 1 and \
     97 <= ord(c) <= 99 and 3 >= int(l) > 0:
         return [c,l]
@@ -14,32 +33,67 @@ def cria_posicao(c,l):
         raise ValueError('cria_posicao: argumentos invalidos')
 
 def obter_pos_c(p):
+    """
+    obter_pos_c: posicao -> str
+
+    devolve a componente coluna c da posicao p
+    """
     return p[0]
 
 def obter_pos_l(p):
+    """
+    obter_pos_l: posicao -> str
+    
+    devolve a componente linha l da posicao p
+    """
     return p[1]
 
 def cria_copia_posicao(p):
+    """
+    cria_copia_posicao: posicao -> posicao
+    
+    recebe uma posicao e devolve uma copia nova da posicao
+    """
     return p.copy()
 
 def eh_posicao(p):
+    """
+    eh_posicao: universal -> booleano
+
+    devolve True caso o seu argumento seja um TAD posicao e false
+    caso contrario
+    """
     return isinstance(p, list) and len(p) == 2 and type(p[0]) == \
     type(p[1]) == str and 97 <= ord(p[0]) <= 99 and 3 >= int(p[1]) > 0
 
 def posicoes_iguais(p1, p2):
+    """
+    posicoes_iguais: posicao x posicao -> booleano
+
+    devolve True apenas se p1 e p2 sao posicoes e sao iguais
+    """
     return p1 == p2 and eh_posicao(p1) and eh_posicao(p2)
 
 def posicao_para_str(p):
+    """
+    posicao_para_str: posicao -> str
+
+    devolve a cadeia de caracteres 'cl' que representa o seu
+    argumento, sendo os valores c e l as componentes coluna e linha de p
+    """
     return str(obter_pos_c(p) + obter_pos_l(p))
 
-def str_para_posicao(s):
-    return cria_posicao(s[:1], s[1:])
 
 ##############################################################################
 #                           FUNCOES CRIADAS POR MIM                          #
 ##############################################################################
 
 def str_para_posicao(s):
+    """ 
+    str_para_posicao: str -> posicao
+    
+    devolve a posicao que corresponde à string 'cl'
+    """
     return cria_posicao(s[:1], s[1:])
 
 ##############################################################################
@@ -47,6 +101,12 @@ def str_para_posicao(s):
 ##############################################################################
 
 def obter_posicoes_adjacentes(p):
+    """
+    obter_posicoes_adjacentes: posicao -> tuplo de posicoes
+
+    devolve um tuplo com as posicoes adjacentes a posicao p de acordo
+    com a ordem de leitura do tabuleiro
+    """
     posicoes = {
         'a1':(['b','1'], ['a', '2'], ['b','2']),
         'a2':(['a','1'], ['b', '2'], ['a','3']),
@@ -67,7 +127,23 @@ def obter_posicoes_adjacentes(p):
 #                                   TAD PECA                                 #
 ##############################################################################
 
+#TAD peca
+#Representacao da peca: 1 ou 0 ou -1 ou 1.0 ou 0.0 ou -1.0
+# cria_peca: str -> peca
+# cria_copia_peca: peca -> peca
+# eh_peca: universal -> booleano
+# pecas_iguais: peca x peca -> booleano
+# peca_para_str: peca -> str
+# peca_para_inteiro: peca -> N
+
 def cria_peca(j):
+    """
+    cria_peca: str -> peca
+    
+    recebe uma cadeira de carateres corresponde ao identficador
+    de um dos dois jogadores ('X' ou 'O') ou a uma peca livre (' ')
+    e devolve a peca correspondente
+    """
     if j == 'X':
         return 1
     elif j == ' ':
@@ -78,25 +154,44 @@ def cria_peca(j):
         raise ValueError('cria_peca: argumento invalido')
 
 def cria_copia_peca(j):
+    """
+    cria_copia_peca: peca -> peca
+    
+    recebe uma peca e devolve uma copia nova da peca
+    """
     return float(j)
 
 def eh_peca(j):
-    if type(j) == float:
-        if j == 1:
-            return True
-        elif j == 0:
-            return True
-        elif j == -1:
-            return True
-        else:
-            return False
+    """
+    eh_peca: universal -> booleano
+
+    devolve True caso o seu argumento seja um TAD peca e False
+    caso contrario
+    """
+    if j == 1:
+        return True
+    elif j == 0:
+        return True
+    elif j == -1:
+        return True
     else:
-        return type(j) == int and -1 <= j <= 1
+        return False
 
 def pecas_iguais(j1, j2):
+    """
+    pecas_iguais: peca x peca -> booleano
+
+    devolve True apenas se p1 e p2 sao pecas e sao iguais
+    """
     return j1 == j2 and eh_peca(j1) and eh_peca(j2)
 
 def peca_para_str(j):
+    """
+    pecas_para_str: peca -> str
+
+    devolve a cadeia de carateres que representa o jogador
+    dono da peca, isto é, '[X]', '[O]' ou '[ ]'
+    """
     if j == 1:
         return '[X]'
     if j == 0:
@@ -109,6 +204,11 @@ def peca_para_str(j):
 ##############################################################################
 
 def inteiro_para_peca(j):
+    """
+    inteiro_para_peca: int -> peca
+
+    devolve 'X', ' ', 'O' para os inputs 1, 0, -1, respetivamente
+    """
     if j == 1:
         return 'X'
     elif j == 0:
@@ -121,11 +221,18 @@ def inteiro_para_peca(j):
 ##############################################################################
 
 def peca_para_inteiro(j):
+    """
+    peca_para_inteiro: peca -> N
+    
+    devolve um inteiro valor 1, -1 ou 0, dependendo se a peca e do
+    jogador 'X', 'O' ou livre, respetivamente
+    """
     return cria_peca(peca_para_str(j)[1:2])
 
 ##############################################################################
 #                                TAD TABULEIRO                               #
 ##############################################################################
+
 def cria_tabuleiro():
     tabuleiro = {
         'a1':cria_peca(' '), 
