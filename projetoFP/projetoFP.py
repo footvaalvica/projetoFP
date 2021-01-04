@@ -276,8 +276,8 @@ def obter_peca(t, p):
     """
     obter_peca: tabuleiro x posicao -> peca
 
-    devolve a peça na posicao p do tabuleiro. Se a posicao
-    estiver ocupada, devolve uma peça livre.
+    devolve a peca na posicao p do tabuleiro. Se a posicao
+    estiver ocupada, devolve uma peca livre.
     """
     return t[posicao_para_str(p)]
 
@@ -305,7 +305,7 @@ def coloca_peca(t,j,p):
     """
     coloca_peca: tabuleiro x peca x posicao -> tabuleiro
 
-    modifica destrutivamente o tabuleiro t colocando a peça
+    modifica destrutivamente o tabuleiro t colocando a peca
     j na posicao p, e devolve o proprio tabuleiro
     """
     t[posicao_para_str(p)] = peca_para_inteiro(j)
@@ -438,7 +438,7 @@ def soma_pecas_em_linha(t,s):
     """
     soma_pecas_em_linha: tabuleiro x str -> int
 
-    devolve o valor da soma das peças do vetor, por exemplo
+    devolve o valor da soma das pecas do vetor, por exemplo
     (1, 0, 1) devolve 2
     """
     soma = 0
@@ -779,4 +779,4 @@ def moinho(peca, dif):
 
 ##############################################################################
 #                                      FIM                                   #
-##############################################################################            
+##############################################################################
